@@ -17,6 +17,8 @@ export const signUp = async (email: string, password: string, name?: string) => 
   const userProfile: UserProfile = {
     id: user.uid,
     email: user.email!,
+    bio: "",
+    avatar: "",
     name: name || "",
     timezone: Intl.DateTimeFormat().resolvedOptions().timeZone,
     theme: "system",

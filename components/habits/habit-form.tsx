@@ -45,17 +45,28 @@ export function HabitForm({ habit, onSuccess }: HabitFormProps) {
     timezone: habit?.timezone || Intl.DateTimeFormat().resolvedOptions().timeZone,
   })
 
+  // Basic validation: title is required; if quantitative, unit and target (>=1) are required
+  const isValid =
+    formData.title.trim().length > 0 &&
+    (!formData.isQuantitative || (formData.unit && Number.isFinite(formData.target) && formData.target >= 1))
+
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
     if (!user) return
+
+    // Block submit if invalid
+    if (!isValid) {
+      setError("Preencha todos os campos obrigatórios.")
+      return
+    }
 
     setLoading(true)
     setError("")
 
     try {
       const habitData = {
-        title: formData.title,
-        description: formData.description || undefined,
+        title: formData.title.trim(),
+        description: formData.description?.trim() || undefined,
         color: formData.color,
         icon: formData.icon,
         frequency: formData.frequency,
@@ -188,7 +199,7 @@ export function HabitForm({ habit, onSuccess }: HabitFormProps) {
         <Button type="button" variant="outline" onClick={() => router.back()} disabled={loading}>
           Cancelar
         </Button>
-        <Button type="submit" disabled={loading}>
+        <Button type="submit" disabled={loading || !isValid}>
           {loading && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
           {habit ? "Atualizar Hábito" : "Criar Hábito"}
         </Button>
