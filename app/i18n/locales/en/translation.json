@@ -1,0 +1,50 @@
+{
+  "common": {
+    "save": "Save",
+    "cancel": "Cancel",
+    "delete": "Delete",
+    "edit": "Edit",
+    "create": "Create",
+    "loading": "Loading...",
+    "actions": "Actions",
+    "back": "Back"
+  },
+  "dashboard": {
+    "title": "Dashboard",
+    "subtitle": "Track your progress and manage your activities",
+    "stats": {
+      "habits_today": "Habits Today",
+      "completed": "Completed",
+      "active_goals": "Active Goals",
+      "current_streak": "Current Streak"
+    },
+    "today_habits": "Today's Habits",
+    "goals_overview": "Goals Overview",
+    "quick_actions": "Quick Actions"
+  },
+  "sidebar": {
+    "dashboard": "Dashboard",
+    "goals": "Goals",
+    "habits": "Habits",
+    "tasks": "Tasks",
+    "reports": "Reports",
+    "settings": "Settings",
+    "logout": "Logout"
+  },
+  "auth": {
+    "login": {
+      "title": "Login",
+      "description": "Enter your email below to login to your account",
+      "submit": "Sign In",
+      "no_account": "Don't have an account?",
+      "signup_link": "Sign up"
+    },
+    "signup": {
+      "title": "Create an account",
+      "description": "Enter your email below to create your account",
+      "submit": "Sign Up",
+      "has_account": "Already have an account?",
+      "login_link": "Login"
+    }
+  }
+}

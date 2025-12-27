@@ -2,9 +2,10 @@ import type React from "react";
 import type { Metadata } from "next";
 import { GeistSans } from "geist/font/sans";
 import { GeistMono } from "geist/font/mono";
-import "./globals.css";
-import { AuthProvider } from "@/contexts/auth-context";
-import { ThemeProvider } from "@/components/theme-provider";
+import "../globals.css";
+import { Providers } from "@/components/providers";
+import { dir } from "i18next";
+import { languages } from "../i18n/settings";
 
 export const metadata: Metadata = {
   title: "HabitsGoals - Gerencie seus hábitos, metas e tarefas",
@@ -13,13 +14,21 @@ export const metadata: Metadata = {
   generator: "v0.app",
 };
 
-export default function RootLayout({
+export async function generateStaticParams() {
+  return languages.map((lng) => ({ lng }));
+}
+
+export default async function RootLayout({
   children,
+  params,
 }: Readonly<{
   children: React.ReactNode;
+  params: Promise<{ lng: string }>;
 }>) {
+  const { lng } = await params;
+
   return (
-    <html lang="pt-BR" suppressHydrationWarning>
+    <html lang={lng} dir={dir(lng)} suppressHydrationWarning>
       <head>
         <style>{`
 html {
@@ -30,14 +39,7 @@ html {
         `}</style>
       </head>
       <body suppressHydrationWarning>
-        <ThemeProvider
-          attribute="class"
-          defaultTheme="system"
-          enableSystem
-          disableTransitionOnChange
-        >
-          <AuthProvider>{children}</AuthProvider>
-        </ThemeProvider>
+        <Providers>{children}</Providers>
       </body>
     </html>
   );

@@ -2,7 +2,7 @@
 
 import { useState } from "react";
 import Link from "next/link";
-import { usePathname } from "next/navigation";
+import { usePathname, useParams } from "next/navigation";
 import { cn } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
 import { ScrollArea } from "@/components/ui/scroll-area";
@@ -18,39 +18,7 @@ import {
   LogOut,
 } from "lucide-react";
 import { useAuth } from "@/contexts/auth-context";
-
-const navigation = [
-  {
-    name: "Dashboard",
-    href: "/dashboard",
-    icon: LayoutDashboard,
-  },
-  {
-    name: "Hábitos",
-    href: "/habits",
-    icon: Target,
-  },
-  {
-    name: "Metas",
-    href: "/goals",
-    icon: TrendingUp,
-  },
-  {
-    name: "Tarefas",
-    href: "/tasks",
-    icon: CheckSquare,
-  },
-  {
-    name: "Relatórios",
-    href: "/reports",
-    icon: BarChart3,
-  },
-  {
-    name: "Configurações",
-    href: "/settings",
-    icon: Settings,
-  },
-];
+import { useTranslation } from "@/app/i18n/client";
 
 interface SidebarProps {
   className?: string;
@@ -60,6 +28,42 @@ export function Sidebar({ className }: SidebarProps) {
   const pathname = usePathname();
   const { userProfile, signOut } = useAuth();
   const [isCollapsed, setIsCollapsed] = useState(false);
+  const params = useParams();
+  const lng = params.lng as string;
+  const { t } = useTranslation(lng);
+
+  const navigation = [
+    {
+      name: t("sidebar.dashboard", "Dashboard"),
+      href: "/dashboard",
+      icon: LayoutDashboard,
+    },
+    {
+      name: t("sidebar.habits", "Habits"),
+      href: "/habits",
+      icon: Target,
+    },
+    {
+      name: t("sidebar.goals", "Goals"),
+      href: "/goals",
+      icon: TrendingUp,
+    },
+    {
+      name: t("sidebar.tasks", "Tasks"),
+      href: "/tasks",
+      icon: CheckSquare,
+    },
+    {
+      name: t("sidebar.reports", "Reports"),
+      href: "/reports",
+      icon: BarChart3,
+    },
+    {
+      name: t("sidebar.settings", "Settings"),
+      href: "/settings",
+      icon: Settings,
+    },
+  ];
 
   return (
     <div className={cn("flex h-full flex-col bg-card border-r", className)}>
@@ -91,9 +95,14 @@ export function Sidebar({ className }: SidebarProps) {
       <ScrollArea className="flex-1 px-3 py-4">
         <nav className="space-y-2">
           {navigation.map((item) => {
-            const isActive = pathname === item.href;
+            const linkHref = `/${lng}${item.href}`;
+            // Check if pathname matches the link href (handling potential trailing slash or sub-paths if strict)
+            // Or simply strict match for now
+            const isActive =
+              pathname === linkHref || pathname.startsWith(`${linkHref}/`);
+
             return (
-              <Link key={item.name} href={item.href}>
+              <Link key={item.href} href={linkHref}>
                 <Button
                   variant={isActive ? "secondary" : "ghost"}
                   className={cn(
@@ -134,7 +143,7 @@ export function Sidebar({ className }: SidebarProps) {
           )}
         >
           <LogOut className={cn("h-4 w-4", !isCollapsed && "mr-3")} />
-          {!isCollapsed && "Sair"}
+          {!isCollapsed && t("sidebar.logout", "Log out")}
         </Button>
       </div>
     </div>

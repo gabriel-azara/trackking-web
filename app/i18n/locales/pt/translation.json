@@ -1,0 +1,50 @@
+{
+  "common": {
+    "save": "Salvar",
+    "cancel": "Cancelar",
+    "delete": "Excluir",
+    "edit": "Editar",
+    "create": "Criar",
+    "loading": "Carregando...",
+    "actions": "Ações",
+    "back": "Voltar"
+  },
+  "dashboard": {
+    "title": "Dashboard",
+    "subtitle": "Acompanhe seu progresso e gerencie suas atividades",
+    "stats": {
+      "habits_today": "Hábitos Hoje",
+      "completed": "Concluídos",
+      "active_goals": "Metas Ativas",
+      "current_streak": "Sequência Atual"
+    },
+    "today_habits": "Hábitos de Hoje",
+    "goals_overview": "Visão Geral das Metas",
+    "quick_actions": "Ações Rápidas"
+  },
+  "sidebar": {
+    "dashboard": "Dashboard",
+    "goals": "Metas",
+    "habits": "Hábitos",
+    "tasks": "Tarefas",
+    "reports": "Relatórios",
+    "settings": "Configurações",
+    "logout": "Sair"
+  },
+  "auth": {
+    "login": {
+      "title": "Entrar",
+      "description": "Entre com seu email abaixo para acessar sua conta",
+      "submit": "Entrar",
+      "no_account": "Não tem uma conta?",
+      "signup_link": "Cadastre-se"
+    },
+    "signup": {
+      "title": "Criar conta",
+      "description": "Entre com seu email abaixo para criar sua conta",
+      "submit": "Cadastrar",
+      "has_account": "Já tem uma conta?",
+      "login_link": "Entrar"
+    }
+  }
+}

@@ -54,3 +54,10 @@
 - When writing code, always consider the "Future Developer" – make it readable and maintainable.
 - Remove unused imports and dead code immediately.
 - Add brief, meaningful comments for complex logic (avoid "what", explain "why").
+
+## 8. Linting & Formatting
+
+- Use ESLint for code quality and formatting.
+- Use Prettier for consistent code formatting.
+- Use Husky for Git hooks to enforce code quality and formatting.
+- Always run `npm run build && npm run lint` for review before committing.
