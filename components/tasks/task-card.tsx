@@ -16,7 +16,7 @@ interface TaskCardProps {
   task: Task
   onToggle?: (task: Task) => void
   onEdit?: (task: Task) => void
-  onDelete?: (task: Task) => void
+  onDelete?: (task: Task) => React.ReactNode
 }
 
 export function TaskCard({ task, onToggle, onEdit, onDelete }: TaskCardProps) {
@@ -167,9 +167,8 @@ export function TaskCard({ task, onToggle, onEdit, onDelete }: TaskCardProps) {
                 </DropdownMenuItem>
               )}
               {onDelete && (
-                <DropdownMenuItem onClick={() => onDelete(task)} className="text-destructive">
-                  <Trash2 className="h-4 w-4 mr-2" />
-                  Excluir
+                <DropdownMenuItem asChild className="text-destructive">
+                  {onDelete(task)}
                 </DropdownMenuItem>
               )}
             </DropdownMenuContent>

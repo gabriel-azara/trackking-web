@@ -14,7 +14,7 @@ interface HabitCardProps {
   habit: Habit & { todayLog?: HabitLog }
   onToggleToday?: (habitId: string, completed: boolean, value?: number) => void
   onEdit?: (habit: Habit) => void
-  onDelete?: (habit: Habit) => void
+  onDelete?: (habit: Habit) => React.ReactNode
 }
 
 export function HabitCard({ habit, onToggleToday, onEdit, onDelete }: HabitCardProps) {
@@ -110,9 +110,8 @@ export function HabitCard({ habit, onToggleToday, onEdit, onDelete }: HabitCardP
                   </DropdownMenuItem>
                 )}
                 {onDelete && (
-                  <DropdownMenuItem onClick={() => onDelete(habit)} className="text-destructive">
-                    <Trash2 className="h-4 w-4 mr-2" />
-                    Excluir
+                  <DropdownMenuItem asChild className="text-destructive">
+                    {onDelete(habit)}
                   </DropdownMenuItem>
                 )}
               </DropdownMenuContent>

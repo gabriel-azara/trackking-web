@@ -1,0 +1,56 @@
+# CODING STANDARDS
+
+## 1. Clean Code & Architecture
+
+- **SOLID Principles**: Adhere to SOLID principles for all designs.
+- **DRY (Don't Repeat Yourself)**: Extract common logic into custom hooks (`/hooks`) or utility functions (`/lib`).
+- **Modularity**: functions should be small, focused, and do one thing well.
+- **Composition**: Prefer composition over inheritance. generalized components should be reusable.
+
+## 2. Technology Stack
+
+- **Framework**: Next.js (App Router).
+- **Language**: TypeScript (Strict mode).
+- **Styling**: Tailwind CSS (if present), or CSS Modules. Avoid inline styles.
+- **State Management**: Use React Context or Zustand for global state; prefer local state when possible.
+
+## 3. TypeScript Rules
+
+- **Strict Typing**: ALWAYS define types/interfaces.
+- **No `any`**: Avoid `any` type. Use `unknown` if unknown, or generic types.
+- **Interfaces**: Use `interface` for object definitions and `type` for unions/intersections.
+- **Props**: Explicitly type Component props (e.g., `interface ButtonProps { ... }`).
+
+## 4. Naming Conventions (ENGLISH ONLY)
+
+- **Language**: All code (variables, functions, comments, commits) MUST be in English.
+- **Variables**: Use descriptive `camelCase` (e.g., `isLoading`, `userProfile`).
+- **Booleans**: Prefix with `is`, `has`, `should` (e.g., `isVisible`, `hasError`).
+- **Constants**: Use `UPPER_SNAKE_CASE` for global constants.
+- **Functions**: Use verb-noun pairs (e.g., `fetchUserData`, `handleClick`).
+- **Components**: Use `PascalCase` (e.g., `UserProfile`, `SubmitButton`).
+- **Files**:
+  - Components/Pages: `index.tsx` inside a named folder or `ComponentName.tsx`.
+  - Utilities: `camelCase.ts`.
+
+## 5. Reusability Strategy
+
+- **Components**: If a piece of UI appears more than once, extract it to `src/components`.
+- **Logic**: If logic is complex or reusable, extract it to a custom hook in `src/hooks`.
+- **Generic**: Keep low-level components (inputs, buttons, cards) purely presentational and generic.
+
+## 6. Folder Structure & Organization
+
+- Maintain a clean and predictable structure:
+  - `src/app`: Page routes and layouts.
+  - `src/components`: Reusable UI components.
+  - `src/hooks`: Custom React hooks.
+  - `src/lib`: Helper functions, API clients, utils.
+  - `src/types` or `src/interfaces`: Shared type definitions.
+  - `src/services`: API calls and external service integrations.
+
+## 7. Workflow
+
+- When writing code, always consider the "Future Developer" – make it readable and maintainable.
+- Remove unused imports and dead code immediately.
+- Add brief, meaningful comments for complex logic (avoid "what", explain "why").
