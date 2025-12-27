@@ -1,36 +1,36 @@
-"use client"
+"use client";
 
-import type React from "react"
+import type React from "react";
 
-import { useState } from "react"
-import { useRouter } from "next/navigation"
-import { Button } from "@/components/ui/button"
-import { Input } from "@/components/ui/input"
-import { Label } from "@/components/ui/label"
-import { Textarea } from "@/components/ui/textarea"
-import { Switch } from "@/components/ui/switch"
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
-import { Alert, AlertDescription } from "@/components/ui/alert"
-import { ColorPicker } from "./color-picker"
-import { IconPicker } from "./icon-picker"
-import { FrequencyPicker } from "./frequency-picker"
-import { UnitSelect } from "./unit-select"
-import { TimeList } from "./time-list"
-import type { Habit } from "@/lib/types"
-import { createHabit, updateHabit } from "@/lib/firebase/habits"
-import { useAuth } from "@/contexts/auth-context"
-import { Loader2 } from "lucide-react"
+import { useState } from "react";
+import { useRouter } from "next/navigation";
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
+import { Textarea } from "@/components/ui/textarea";
+import { Switch } from "@/components/ui/switch";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Alert, AlertDescription } from "@/components/ui/alert";
+import { ColorPicker } from "./color-picker";
+import { IconPicker } from "./icon-picker";
+import { FrequencyPicker } from "./frequency-picker";
+import { UnitSelect } from "./unit-select";
+import { TimeList } from "./time-list";
+import type { Habit } from "@/lib/types";
+import { createHabit, updateHabit } from "@/lib/firebase/habits";
+import { useAuth } from "@/contexts/auth-context";
+import { Loader2 } from "lucide-react";
 
 interface HabitFormProps {
-  habit?: Habit
-  onSuccess?: () => void
+  habit?: Habit;
+  onSuccess?: () => void;
 }
 
 export function HabitForm({ habit, onSuccess }: HabitFormProps) {
-  const { user } = useAuth()
-  const router = useRouter()
-  const [loading, setLoading] = useState(false)
-  const [error, setError] = useState("")
+  const { user } = useAuth();
+  const router = useRouter();
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState("");
 
   const [formData, setFormData] = useState({
     title: habit?.title || "",
@@ -42,26 +42,30 @@ export function HabitForm({ habit, onSuccess }: HabitFormProps) {
     unit: habit?.unit || "times",
     target: habit?.target || 1,
     remindAt: habit?.remindAt || [],
-    timezone: habit?.timezone || Intl.DateTimeFormat().resolvedOptions().timeZone,
-  })
+    timezone:
+      habit?.timezone || Intl.DateTimeFormat().resolvedOptions().timeZone,
+  });
 
   // Basic validation: title is required; if quantitative, unit and target (>=1) are required
   const isValid =
     formData.title.trim().length > 0 &&
-    (!formData.isQuantitative || (formData.unit && Number.isFinite(formData.target) && formData.target >= 1))
+    (!formData.isQuantitative ||
+      (formData.unit &&
+        Number.isFinite(formData.target) &&
+        formData.target >= 1));
 
   const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault()
-    if (!user) return
+    e.preventDefault();
+    if (!user) return;
 
     // Block submit if invalid
     if (!isValid) {
-      setError("Preencha todos os campos obrigatórios.")
-      return
+      setError("Preencha todos os campos obrigatórios.");
+      return;
     }
 
-    setLoading(true)
-    setError("")
+    setLoading(true);
+    setError("");
 
     try {
       const habitData = {
@@ -75,25 +79,27 @@ export function HabitForm({ habit, onSuccess }: HabitFormProps) {
         remindAt: formData.remindAt.length > 0 ? formData.remindAt : undefined,
         timezone: formData.timezone,
         type: "habit" as const,
-      }
+      };
 
       if (habit) {
-        await updateHabit(user.uid, habit.id, habitData)
+        await updateHabit(user.uid, habit.id, habitData);
       } else {
-        await createHabit(user.uid, habitData)
+        await createHabit(user.uid, habitData);
       }
 
       if (onSuccess) {
-        onSuccess()
+        onSuccess();
       } else {
-        router.push("/habits")
+        router.push("/habits");
       }
-    } catch (error: any) {
-      setError(error.message || "Erro ao salvar hábito")
+    } catch (error) {
+      setError(
+        error instanceof Error ? error.message : "Erro ao salvar hábito"
+      );
     } finally {
-      setLoading(false)
+      setLoading(false);
     }
-  }
+  };
 
   return (
     <form onSubmit={handleSubmit} className="space-y-6">
@@ -113,7 +119,9 @@ export function HabitForm({ habit, onSuccess }: HabitFormProps) {
             <Input
               id="title"
               value={formData.title}
-              onChange={(e) => setFormData({ ...formData, title: e.target.value })}
+              onChange={(e) =>
+                setFormData({ ...formData, title: e.target.value })
+              }
               placeholder="Ex: Beber água, Exercitar-se, Ler"
               required
             />
@@ -124,15 +132,23 @@ export function HabitForm({ habit, onSuccess }: HabitFormProps) {
             <Textarea
               id="description"
               value={formData.description}
-              onChange={(e) => setFormData({ ...formData, description: e.target.value })}
+              onChange={(e) =>
+                setFormData({ ...formData, description: e.target.value })
+              }
               placeholder="Descreva seu hábito (opcional)"
               rows={3}
             />
           </div>
 
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-            <ColorPicker value={formData.color} onChange={(color) => setFormData({ ...formData, color })} />
-            <IconPicker value={formData.icon} onChange={(icon) => setFormData({ ...formData, icon })} />
+            <ColorPicker
+              value={formData.color}
+              onChange={(color) => setFormData({ ...formData, color })}
+            />
+            <IconPicker
+              value={formData.icon}
+              onChange={(icon) => setFormData({ ...formData, icon })}
+            />
           </div>
         </CardContent>
       </Card>
@@ -145,14 +161,19 @@ export function HabitForm({ habit, onSuccess }: HabitFormProps) {
           <div className="flex items-center space-x-2">
             <Switch
               checked={formData.isQuantitative}
-              onCheckedChange={(checked) => setFormData({ ...formData, isQuantitative: checked })}
+              onCheckedChange={(checked) =>
+                setFormData({ ...formData, isQuantitative: checked })
+              }
             />
             <Label>Hábito quantitativo (com meta numérica)</Label>
           </div>
 
           {formData.isQuantitative && (
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-              <UnitSelect value={formData.unit} onChange={(unit) => setFormData({ ...formData, unit })} />
+              <UnitSelect
+                value={formData.unit}
+                onChange={(unit) => setFormData({ ...formData, unit })}
+              />
               <div className="space-y-2">
                 <Label htmlFor="target">Meta por ocorrência *</Label>
                 <Input
@@ -160,7 +181,12 @@ export function HabitForm({ habit, onSuccess }: HabitFormProps) {
                   type="number"
                   min="1"
                   value={formData.target}
-                  onChange={(e) => setFormData({ ...formData, target: Number.parseInt(e.target.value) || 1 })}
+                  onChange={(e) =>
+                    setFormData({
+                      ...formData,
+                      target: Number.parseInt(e.target.value) || 1,
+                    })
+                  }
                   placeholder="Ex: 2000 (ml), 30 (min), 10 (páginas)"
                   required={formData.isQuantitative}
                 />
@@ -196,7 +222,12 @@ export function HabitForm({ habit, onSuccess }: HabitFormProps) {
       </Card>
 
       <div className="flex justify-end space-x-4">
-        <Button type="button" variant="outline" onClick={() => router.back()} disabled={loading}>
+        <Button
+          type="button"
+          variant="outline"
+          onClick={() => router.back()}
+          disabled={loading}
+        >
           Cancelar
         </Button>
         <Button type="submit" disabled={loading || !isValid}>
@@ -205,5 +236,5 @@ export function HabitForm({ habit, onSuccess }: HabitFormProps) {
         </Button>
       </div>
     </form>
-  )
+  );
 }

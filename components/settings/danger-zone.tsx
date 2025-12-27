@@ -78,20 +78,21 @@ export function DangerZone() {
                   </p>
                   <p>
                     Para confirmar, digite <strong>DELETAR</strong> no campo
-                    abaixo:
+                    abaixo: Para confirmar, digite{" "}
+                    <strong>delete minha conta</strong> no campo abaixo:
                   </p>
                 </AlertDialogDescription>
               </AlertDialogHeader>
 
               <div className="space-y-2">
                 <Label htmlFor="confirm-delete">
-                  Digite "DELETAR" para confirmar
+                  Digite &quot;delete minha conta&quot; para confirmar.
                 </Label>
                 <Input
                   id="confirm-delete"
                   value={confirmText}
                   onChange={(e) => setConfirmText(e.target.value)}
-                  placeholder="DELETAR"
+                  placeholder="delete minha conta"
                 />
               </div>
 

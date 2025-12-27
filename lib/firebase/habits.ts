@@ -15,12 +15,14 @@ import { db } from "../firebase";
 import type { Habit, HabitLog } from "../types";
 
 // Helper to clean document data
-const sanitizeHabitData = (data: any) => {
+const sanitizeHabitData = (data: Record<string, unknown>) => {
   const cleaned = { ...data };
 
   // Convert remindAt to Timestamp or remove if invalid
   if (cleaned.remindAt) {
-    cleaned.remindAt = Timestamp.fromDate(new Date(cleaned.remindAt));
+    cleaned.remindAt = Timestamp.fromDate(
+      new Date(cleaned.remindAt as string | number | Date)
+    );
   } else {
     delete cleaned.remindAt;
   }

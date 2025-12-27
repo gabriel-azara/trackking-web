@@ -1,77 +1,92 @@
-"use client"
+"use client";
 
-import { Card, CardContent } from "@/components/ui/card"
-import { Button } from "@/components/ui/button"
-import { Badge } from "@/components/ui/badge"
-import { Progress } from "@/components/ui/progress"
-import { CheckCircle, Circle, MoreHorizontal, Edit, Trash2 } from "lucide-react"
-import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from "@/components/ui/dropdown-menu"
-import type { Habit, HabitLog } from "@/lib/types"
-import { cn } from "@/lib/utils"
-import * as LucideIcons from "lucide-react"
+import { Card, CardContent } from "@/components/ui/card";
+import { Button } from "@/components/ui/button";
+import { Badge } from "@/components/ui/badge";
+import { Progress } from "@/components/ui/progress";
+import { CheckCircle, Circle, MoreHorizontal, Edit } from "lucide-react";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
+import type { Habit, HabitLog } from "@/lib/types";
+import { cn } from "@/lib/utils";
+import { COLORS } from "@/lib/constants";
+import * as LucideIcons from "lucide-react";
 
 interface HabitCardProps {
-  habit: Habit & { todayLog?: HabitLog }
-  onToggleToday?: (habitId: string, completed: boolean, value?: number) => void
-  onEdit?: (habit: Habit) => void
-  onDelete?: (habit: Habit) => React.ReactNode
+  habit: Habit & { todayLog?: HabitLog };
+  onToggleToday?: (habitId: string, completed: boolean, value?: number) => void;
+  onEdit?: (habit: Habit) => void;
+  onArchive?: (habit: Habit) => void;
+  onDelete?: (habit: Habit) => React.ReactNode;
 }
 
-export function HabitCard({ habit, onToggleToday, onEdit, onDelete }: HabitCardProps) {
+export function HabitCard({
+  habit,
+  onToggleToday,
+  onEdit,
+  onArchive,
+  onDelete,
+}: HabitCardProps) {
   const getHabitProgress = () => {
-    if (!habit.target) return habit.todayLog?.completed ? 100 : 0
-    if (!habit.todayLog?.value) return 0
-    return Math.min((habit.todayLog.value / habit.target) * 100, 100)
-  }
+    if (!habit.target) return habit.todayLog?.completed ? 100 : 0;
+    if (!habit.todayLog?.value) return 0;
+    return Math.min((habit.todayLog.value / habit.target) * 100, 100);
+  };
 
   const getColorStyle = (color?: string) => {
-    if (!color) return {}
-    if (color.startsWith("#")) {
-      return { backgroundColor: color }
+    if (!color) return {};
+    const predefinedColor = COLORS.find((c) => c.value === color);
+    if (predefinedColor) {
+      return { backgroundColor: predefinedColor.hex };
     }
-    return {}
-  }
-
-  const getColorClass = (color?: string) => {
-    if (!color) return "bg-gray-500"
-    if (color.startsWith("#")) return ""
-    return `bg-${color}`
-  }
+    if (color.startsWith("#")) {
+      return { backgroundColor: color };
+    }
+    return {};
+  };
 
   const renderIcon = (iconName?: string) => {
-    if (!iconName) return <LucideIcons.Circle className="h-5 w-5" />
+    if (!iconName) return <LucideIcons.Circle className="h-5 w-5" />;
 
-    const IconComponent = (LucideIcons as any)[
+    const IconComponent = (
+      LucideIcons as unknown as Record<string, React.ElementType>
+    )[
       iconName
         .split("-")
         .map((word) => word.charAt(0).toUpperCase() + word.slice(1))
         .join("")
         .replace(/[^a-zA-Z0-9]/g, "")
-    ]
+    ];
 
     if (IconComponent) {
-      return <IconComponent className="h-5 w-5" />
+      return <IconComponent className="h-5 w-5" />;
     }
-    return <LucideIcons.Circle className="h-5 w-5" />
-  }
+    return <LucideIcons.Circle className="h-5 w-5" />;
+  };
 
-  const progress = getHabitProgress()
-  const isCompleted = habit.todayLog?.completed || progress >= 100
+  const progress = getHabitProgress();
+  const isCompleted = habit.todayLog?.completed || progress >= 100;
 
   const getFrequencyText = () => {
     switch (habit.frequency.kind) {
       case "daily":
-        return habit.frequency.times ? `${habit.frequency.times}x por dia` : "Diário"
+        return habit.frequency.times
+          ? `${habit.frequency.times}x por dia`
+          : "Diário";
       case "weekly":
-        return `${habit.frequency.days?.length || 0} dias por semana`
+        return `${habit.frequency.days?.length || 0} dias por semana`;
       case "monthly":
-        return `${habit.frequency.dates?.length || 0} dias por mês`
+        return `${habit.frequency.dates?.length || 0} dias por mês`;
       case "custom":
-        return "Personalizado"
+        return "Personalizado";
       default:
-        return "Diário"
+        return "Diário";
     }
-  }
+  };
 
   return (
     <Card className="hover:shadow-md transition-shadow">
@@ -79,14 +94,18 @@ export function HabitCard({ habit, onToggleToday, onEdit, onDelete }: HabitCardP
         <div className="flex items-start justify-between mb-3">
           <div className="flex items-center space-x-3">
             <div
-              className={cn("w-3 h-3 rounded-full", getColorClass(habit.color))}
+              className={cn("w-3 h-3 rounded-full")}
               style={getColorStyle(habit.color)}
             />
             <div className="flex items-center space-x-2">
               {renderIcon(habit.icon)}
               <div>
                 <h3 className="font-medium">{habit.title}</h3>
-                {habit.description && <p className="text-sm text-muted-foreground">{habit.description}</p>}
+                {habit.description && (
+                  <p className="text-sm text-muted-foreground">
+                    {habit.description}
+                  </p>
+                )}
               </div>
             </div>
           </div>
@@ -109,11 +128,13 @@ export function HabitCard({ habit, onToggleToday, onEdit, onDelete }: HabitCardP
                     Editar
                   </DropdownMenuItem>
                 )}
-                {onDelete && (
-                  <DropdownMenuItem asChild className="text-destructive">
-                    {onDelete(habit)}
+                {onArchive && (
+                  <DropdownMenuItem onClick={() => onArchive(habit)}>
+                    <LucideIcons.Archive className="h-4 w-4 mr-2" />
+                    {habit.archive ? "Desarquivar" : "Arquivar"}
                   </DropdownMenuItem>
                 )}
+                {onDelete && onDelete(habit)}
               </DropdownMenuContent>
             </DropdownMenu>
           </div>
@@ -132,7 +153,9 @@ export function HabitCard({ habit, onToggleToday, onEdit, onDelete }: HabitCardP
         )}
 
         <div className="flex items-center justify-between">
-          <Badge variant={isCompleted ? "default" : "secondary"}>{isCompleted ? "Concluído" : "Pendente"}</Badge>
+          <Badge variant={isCompleted ? "default" : "secondary"}>
+            {isCompleted ? "Concluído" : "Pendente"}
+          </Badge>
 
           {onToggleToday && (
             <Button
@@ -140,11 +163,15 @@ export function HabitCard({ habit, onToggleToday, onEdit, onDelete }: HabitCardP
               variant={isCompleted ? "default" : "outline"}
               onClick={() => onToggleToday(habit.id, !isCompleted)}
             >
-              {isCompleted ? <CheckCircle className="h-4 w-4" /> : <Circle className="h-4 w-4" />}
+              {isCompleted ? (
+                <CheckCircle className="h-4 w-4" />
+              ) : (
+                <Circle className="h-4 w-4" />
+              )}
             </Button>
           )}
         </div>
       </CardContent>
     </Card>
-  )
+  );
 }

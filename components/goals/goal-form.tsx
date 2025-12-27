@@ -15,7 +15,6 @@ import { ColorPicker } from "../habits/color-picker";
 import { IconPicker } from "../habits/icon-picker";
 import { UnitSelect } from "../habits/unit-select";
 import { MilestoneManager } from "./milestone-manager";
-import { HabitSelector } from "./habit-selector";
 import type { Goal } from "@/lib/types";
 import { createGoal, updateGoal } from "@/lib/firebase/goals";
 import { useAuth } from "@/contexts/auth-context";
@@ -95,8 +94,8 @@ export function GoalForm({ goal, onSuccess }: GoalFormProps) {
       } else {
         router.push("/goals");
       }
-    } catch (error: any) {
-      setError(error.message || "Erro ao salvar meta");
+    } catch (error) {
+      setError(error instanceof Error ? error.message : "Erro ao salvar meta");
     } finally {
       setLoading(false);
     }
@@ -238,7 +237,8 @@ export function GoalForm({ goal, onSuccess }: GoalFormProps) {
         </CardContent>
       </Card>
 
-      <Card>
+      {/* Habit linking temporarily disabled */}
+      {/* <Card>
         <CardHeader>
           <CardTitle>Hábitos Vinculados</CardTitle>
         </CardHeader>
@@ -250,7 +250,7 @@ export function GoalForm({ goal, onSuccess }: GoalFormProps) {
             }
           />
         </CardContent>
-      </Card>
+      </Card> */}
 
       <div className="flex justify-end space-x-4">
         <Button

@@ -1,58 +1,67 @@
-"use client"
+"use client";
 
-import type React from "react"
+import type React from "react";
 
-import { useState } from "react"
-import { useRouter } from "next/navigation"
-import Link from "next/link"
-import { Button } from "@/components/ui/button"
-import { Input } from "@/components/ui/input"
-import { Label } from "@/components/ui/label"
-import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card"
-import { Alert, AlertDescription } from "@/components/ui/alert"
-import { signUp } from "@/lib/firebase/auth"
-import { Loader2, Mail, Lock, User } from "lucide-react"
+import { useState } from "react";
+import { useRouter } from "next/navigation";
+import Link from "next/link";
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardFooter,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card";
+import { Alert, AlertDescription } from "@/components/ui/alert";
+import { signUp } from "@/lib/firebase/auth";
+import { Loader2, Mail, Lock, User } from "lucide-react";
 
 export function SignupForm() {
-  const [name, setName] = useState("")
-  const [email, setEmail] = useState("")
-  const [password, setPassword] = useState("")
-  const [confirmPassword, setConfirmPassword] = useState("")
-  const [loading, setLoading] = useState(false)
-  const [error, setError] = useState("")
-  const router = useRouter()
+  const [name, setName] = useState("");
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const [confirmPassword, setConfirmPassword] = useState("");
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState("");
+  const router = useRouter();
 
   const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault()
-    setLoading(true)
-    setError("")
+    e.preventDefault();
+    setLoading(true);
+    setError("");
 
     if (password !== confirmPassword) {
-      setError("As senhas não coincidem")
-      setLoading(false)
-      return
+      setError("As senhas não coincidem");
+      setLoading(false);
+      return;
     }
 
     if (password.length < 6) {
-      setError("A senha deve ter pelo menos 6 caracteres")
-      setLoading(false)
-      return
+      setError("A senha deve ter pelo menos 6 caracteres");
+      setLoading(false);
+      return;
     }
 
     try {
-      await signUp(email, password, name)
-      router.push("/dashboard")
-    } catch (error: any) {
-      setError(error.message || "Erro ao criar conta")
+      await signUp(email, password, name);
+      router.push("/dashboard");
+    } catch (error: unknown) {
+      setError(error instanceof Error ? error.message : "Erro ao criar conta");
     } finally {
-      setLoading(false)
+      setLoading(false);
     }
-  }
+  };
 
   return (
     <Card className="w-full max-w-md mx-auto">
       <CardHeader className="space-y-1">
-        <CardTitle className="text-2xl font-bold text-center">Criar Conta</CardTitle>
+        <CardTitle className="text-2xl font-bold text-center">
+          Criar Conta
+        </CardTitle>
         <CardDescription className="text-center">
           Crie sua conta para começar a gerenciar seus hábitos e metas
         </CardDescription>
@@ -145,5 +154,5 @@ export function SignupForm() {
         </CardFooter>
       </form>
     </Card>
-  )
+  );
 }

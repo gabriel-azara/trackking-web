@@ -93,7 +93,8 @@ export function ConfirmationModal({
           {requireTextConfirmation && (
             <div className="space-y-2">
               <Label htmlFor="confirm-text">
-                Digite "{confirmText}" para confirmar
+                Se você clicar em &quot;{confirmText}&quot;, a ação será
+                executada.onfirmar
               </Label>
               <Input
                 id="confirm-text"

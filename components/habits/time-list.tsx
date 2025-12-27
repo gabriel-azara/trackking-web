@@ -1,40 +1,44 @@
-"use client"
+"use client";
 
-import type React from "react"
+import type React from "react";
 
-import { useState } from "react"
-import { Button } from "@/components/ui/button"
-import { Input } from "@/components/ui/input"
-import { Label } from "@/components/ui/label"
-import { Badge } from "@/components/ui/badge"
-import { Plus, X } from "lucide-react"
+import { useState } from "react";
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
+import { Badge } from "@/components/ui/badge";
+import { Plus, X } from "lucide-react";
 
 interface TimeListProps {
-  value: string[]
-  onChange: (times: string[]) => void
-  addLabel?: string
+  value: string[];
+  onChange: (times: string[]) => void;
+  addLabel?: string;
 }
 
-export function TimeList({ value, onChange, addLabel = "Adicionar horário" }: TimeListProps) {
-  const [newTime, setNewTime] = useState("")
+export function TimeList({
+  value,
+  onChange,
+  addLabel = "Adicionar horário",
+}: TimeListProps) {
+  const [newTime, setNewTime] = useState("");
 
   const addTime = () => {
     if (newTime && !value.includes(newTime)) {
-      onChange([...value, newTime].sort())
-      setNewTime("")
+      onChange([...value, newTime].sort());
+      setNewTime("");
     }
-  }
+  };
 
   const removeTime = (timeToRemove: string) => {
-    onChange(value.filter((time) => time !== timeToRemove))
-  }
+    onChange(value.filter((time) => time !== timeToRemove));
+  };
 
   const handleKeyPress = (e: React.KeyboardEvent) => {
     if (e.key === "Enter") {
-      e.preventDefault()
-      addTime()
+      e.preventDefault();
+      addTime();
     }
-  }
+  };
 
   return (
     <div className="space-y-4">
@@ -61,9 +65,17 @@ export function TimeList({ value, onChange, addLabel = "Adicionar horário" }: T
       {value.length > 0 && (
         <div className="flex flex-wrap gap-2">
           {value.map((time) => (
-            <Badge key={time} variant="secondary" className="flex items-center space-x-1">
+            <Badge
+              key={time}
+              variant="secondary"
+              className="flex items-center space-x-1"
+            >
               <span>{time}</span>
-              <button type="button" onClick={() => removeTime(time)} className="ml-1 hover:text-destructive">
+              <button
+                type="button"
+                onClick={() => removeTime(time)}
+                className="cursor-pointer ml-1 hover:text-destructive"
+              >
                 <X className="h-3 w-3" />
               </button>
             </Badge>
@@ -71,5 +83,5 @@ export function TimeList({ value, onChange, addLabel = "Adicionar horário" }: T
         </div>
       )}
     </div>
-  )
+  );
 }

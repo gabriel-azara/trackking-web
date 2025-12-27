@@ -20,6 +20,7 @@ import { useAuth } from "@/contexts/auth-context";
 import {
   subscribeToUserHabits,
   deleteHabit,
+  updateHabit,
   logHabitCompletion,
 } from "@/lib/firebase/habits";
 import type { Habit, HabitLog } from "@/lib/types";
@@ -34,7 +35,7 @@ export default function HabitsPage() {
   const [searchTerm, setSearchTerm] = useState("");
   const [filterStatus, setFilterStatus] = useState<
     "all" | "active" | "archived"
-  >("all");
+  >("active");
   const [error, setError] = useState("");
 
   useEffect(() => {
@@ -63,8 +64,10 @@ export default function HabitsPage() {
     try {
       await logHabitCompletion(user.uid, habitId, getToday(), completed, value);
       // The subscription will automatically update the UI
-    } catch (error: any) {
-      setError(error.message || "Erro ao atualizar hábito");
+    } catch (error) {
+      setError(
+        error instanceof Error ? error.message : "Erro ao atualizar hábito"
+      );
     }
   };
 
@@ -77,8 +80,22 @@ export default function HabitsPage() {
 
     try {
       await deleteHabit(user.uid, habit.id);
-    } catch (error: any) {
-      setError(error.message || "Erro ao excluir hábito");
+    } catch (error) {
+      setError(
+        error instanceof Error ? error.message : "Erro ao excluir hábito"
+      );
+    }
+  };
+
+  const handleArchiveHabit = async (habit: Habit) => {
+    if (!user) return;
+
+    try {
+      await updateHabit(user.uid, habit.id, { archive: !habit.archive });
+    } catch (error) {
+      setError(
+        error instanceof Error ? error.message : "Erro ao arquivar hábito"
+      );
     }
   };
 
@@ -155,7 +172,9 @@ export default function HabitsPage() {
           </div>
           <Select
             value={filterStatus}
-            onValueChange={(value: any) => setFilterStatus(value)}
+            onValueChange={(value) =>
+              setFilterStatus(value as "all" | "active" | "archived")
+            }
           >
             <SelectTrigger className="w-full sm:w-48">
               <Filter className="h-4 w-4 mr-2" />
@@ -198,6 +217,7 @@ export default function HabitsPage() {
                 habit={habit}
                 onToggleToday={handleToggleHabit}
                 onEdit={handleEditHabit}
+                onArchive={handleArchiveHabit}
                 onDelete={(habit) => (
                   <ConfirmationModal
                     title="Tem certeza absoluta?"
@@ -206,7 +226,7 @@ export default function HabitsPage() {
                     confirmLabel="Deletar hábito"
                     onConfirm={() => handleDeleteHabit(habit)}
                   >
-                    <div className="flex items-center w-full text-destructive">
+                    <div className="relative flex cursor-pointer select-none items-center rounded-sm px-2 py-1.5 text-sm outline-none transition-colors hover:bg-accent hover:text-accent-foreground data-[disabled]:pointer-events-none data-[disabled]:opacity-50 text-destructive w-full gap-2">
                       <Trash2 className="h-4 w-4 mr-2" />
                       Excluir
                     </div>

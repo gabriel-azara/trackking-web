@@ -13,8 +13,8 @@ import { db } from "../firebase";
 import type { Goal } from "../types";
 
 // Helper to clean document data
-const sanitizeGoalData = (data: any) => {
-  const cleaned: any = { ...data };
+const sanitizeGoalData = (data: Record<string, unknown>) => {
+  const cleaned = { ...data };
 
   // Remove undefined or empty strings
   Object.keys(cleaned).forEach((k) => {
@@ -24,12 +24,16 @@ const sanitizeGoalData = (data: any) => {
 
   // Clean arrays
   if (Array.isArray(cleaned.milestones)) {
-    cleaned.milestones = cleaned.milestones.filter((m: any) => m != null);
-    if (cleaned.milestones.length === 0) delete cleaned.milestones;
+    cleaned.milestones = (cleaned.milestones as unknown[]).filter(
+      (m) => m != null
+    );
+    if ((cleaned.milestones as unknown[]).length === 0)
+      delete cleaned.milestones;
   }
   if (Array.isArray(cleaned.linkedHabits)) {
-    cleaned.linkedHabits = cleaned.linkedHabits.filter((h: any) => h);
-    if (cleaned.linkedHabits.length === 0) delete cleaned.linkedHabits;
+    cleaned.linkedHabits = (cleaned.linkedHabits as unknown[]).filter((h) => h);
+    if ((cleaned.linkedHabits as unknown[]).length === 0)
+      delete cleaned.linkedHabits;
   }
 
   return cleaned;
@@ -94,14 +98,19 @@ export const subscribeToUserGoals = (
   const q = query(goalsRef, orderBy("createdAt", "desc"));
 
   return onSnapshot(q, (querySnapshot) => {
-    const goals = querySnapshot.docs.map(
-      (doc) =>
-        ({
-          id: doc.id,
-          ...doc.data(),
-        } as Goal)
-    );
-    callback(goals);
+    try {
+      const goals = querySnapshot.docs.map(
+        (doc) =>
+          ({
+            id: doc.id,
+            ...doc.data(),
+          } as Goal)
+      );
+      callback(goals);
+    } catch (error: unknown) {
+      if (error instanceof Error) throw error;
+      throw new Error("Erro desconhecido ao atualizar meta");
+    }
   });
 };
 

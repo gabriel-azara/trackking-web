@@ -1,44 +1,58 @@
-"use client"
+"use client";
 
-import { useEffect, useState } from "react"
-import { Label } from "@/components/ui/label"
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
-import { Badge } from "@/components/ui/badge"
-import { useAuth } from "@/contexts/auth-context"
-import { subscribeToUserGoals } from "@/lib/firebase/goals"
-import type { Goal } from "@/lib/types"
-import { TrendingUp, Folder } from "lucide-react"
+import { useEffect, useState } from "react";
+import { Label } from "@/components/ui/label";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
+import { Badge } from "@/components/ui/badge";
+import { useAuth } from "@/contexts/auth-context";
+import { subscribeToUserGoals } from "@/lib/firebase/goals";
+import type { Goal } from "@/lib/types";
+import { TrendingUp, Folder } from "lucide-react";
 
 interface GoalProjectSelectorProps {
-  goalId?: string
-  projectId?: string
-  onGoalChange: (goalId?: string) => void
-  onProjectChange: (projectId?: string) => void
+  goalId?: string;
+  projectId?: string;
+  onGoalChange: (goalId?: string) => void;
+  onProjectChange: (projectId?: string) => void;
 }
 
-export function GoalProjectSelector({ goalId, projectId, onGoalChange, onProjectChange }: GoalProjectSelectorProps) {
-  const { user } = useAuth()
-  const [goals, setGoals] = useState<Goal[]>([])
-  const [loading, setLoading] = useState(true)
+export function GoalProjectSelector({
+  goalId,
+  projectId,
+  onGoalChange,
+  onProjectChange,
+}: GoalProjectSelectorProps) {
+  const { user } = useAuth();
+  const [goals, setGoals] = useState<Goal[]>([]);
 
   useEffect(() => {
-    if (!user) return
+    if (!user) return;
 
     const unsubscribe = subscribeToUserGoals(user.uid, (fetchedGoals) => {
-      setGoals(fetchedGoals)
-      setLoading(false)
-    })
+      setGoals(fetchedGoals);
+    });
 
-    return unsubscribe
-  }, [user])
+    return unsubscribe;
+  }, [user]);
 
-  const selectedGoal = goals.find((g) => g.id === goalId)
+  const selectedGoal = goals.find((g) => g.id === goalId);
 
   return (
     <div className="space-y-4">
       <div className="space-y-2">
         <Label>Vincular à Meta</Label>
-        <Select value={goalId || "none"} onValueChange={(value) => onGoalChange(value === "none" ? undefined : value)}>
+        <Select
+          value={goalId || "none"}
+          onValueChange={(value) =>
+            onGoalChange(value === "none" ? undefined : value)
+          }
+        >
           <SelectTrigger>
             <SelectValue placeholder="Selecionar meta (opcional)">
               {selectedGoal && (
@@ -72,7 +86,9 @@ export function GoalProjectSelector({ goalId, projectId, onGoalChange, onProject
         <Label>Vincular ao Projeto</Label>
         <Select
           value={projectId || "none"}
-          onValueChange={(value) => onProjectChange(value === "none" ? undefined : value)}
+          onValueChange={(value) =>
+            onProjectChange(value === "none" ? undefined : value)
+          }
         >
           <SelectTrigger>
             <SelectValue placeholder="Selecionar projeto (opcional)">
@@ -97,5 +113,5 @@ export function GoalProjectSelector({ goalId, projectId, onGoalChange, onProject
         </Select>
       </div>
     </div>
-  )
+  );
 }

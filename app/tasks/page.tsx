@@ -1,6 +1,5 @@
 "use client";
 
-import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import { AppLayout } from "@/components/layout/app-layout";
 import { TaskCard } from "@/components/tasks/task-card";
@@ -26,111 +25,32 @@ import {
   Clock,
   Trash2,
 } from "lucide-react";
-import { useAuth } from "@/contexts/auth-context";
-import {
-  subscribeToUserTasks,
-  deleteTask,
-  updateTask,
-} from "@/lib/firebase/tasks";
-import type { Task } from "@/lib/types";
-import { getToday, isOverdue } from "@/lib/utils/date";
 import { ConfirmationModal } from "@/components/modal";
+import { useTasks } from "@/hooks/use-tasks";
+import { Task } from "@/lib/types";
 
 export default function TasksPage() {
-  const { user } = useAuth();
   const router = useRouter();
-  const [tasks, setTasks] = useState<Task[]>([]);
-  const [loading, setLoading] = useState(true);
-  const [searchTerm, setSearchTerm] = useState("");
-  const [filterPriority, setFilterPriority] = useState<
-    "all" | "high" | "medium" | "low"
-  >("all");
-  const [filterStatus, setFilterStatus] = useState<
-    "all" | "todo" | "doing" | "done"
-  >("all");
-  const [error, setError] = useState("");
-
-  useEffect(() => {
-    if (!user) return;
-
-    const unsubscribe = subscribeToUserTasks(user.uid, (fetchedTasks) => {
-      setTasks(fetchedTasks);
-      setLoading(false);
-    });
-
-    return unsubscribe;
-  }, [user]);
-
-  const handleToggleTask = async (task: Task) => {
-    if (!user) return;
-
-    try {
-      const newStatus = task.status === "done" ? "todo" : "done";
-      await updateTask(user.uid, task.id, { status: newStatus });
-    } catch (error: any) {
-      setError(error.message || "Erro ao atualizar tarefa");
-    }
-  };
+  const {
+    loading: isLoading,
+    error,
+    searchTerm,
+    setSearchTerm,
+    filterPriority,
+    setFilterPriority,
+    filterStatus,
+    setFilterStatus,
+    toggleTask,
+    removeTask,
+    getFilteredTasks,
+    stats,
+  } = useTasks();
 
   const handleEditTask = (task: Task) => {
     router.push(`/tasks/${task.id}/edit`);
   };
 
-  const handleDeleteTask = async (task: Task) => {
-    if (!user) return;
-
-    try {
-      await deleteTask(user.uid, task.id);
-    } catch (error: any) {
-      setError(error.message || "Erro ao excluir tarefa");
-    }
-  };
-
-  const filterTasks = (tasks: Task[], view: "all" | "today" | "upcoming") => {
-    const filtered = tasks.filter((task) => {
-      const matchesSearch =
-        task.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
-        task.description?.toLowerCase().includes(searchTerm.toLowerCase());
-
-      const matchesPriority =
-        filterPriority === "all" || task.priority === filterPriority;
-      const matchesStatus =
-        filterStatus === "all" || task.status === filterStatus;
-
-      return matchesSearch && matchesPriority && matchesStatus;
-    });
-
-    switch (view) {
-      case "today":
-        return filtered.filter(
-          (task) => task.dueDate === getToday() || task.status === "doing"
-        );
-      case "upcoming":
-        return filtered.filter(
-          (task) => task.dueDate && task.dueDate > getToday()
-        );
-      default:
-        return filtered;
-    }
-  };
-
-  const getTasksByView = (view: "all" | "today" | "upcoming") => {
-    return filterTasks(tasks, view);
-  };
-
-  const stats = {
-    total: tasks.length,
-    todo: tasks.filter((t) => t.status === "todo").length,
-    doing: tasks.filter((t) => t.status === "doing").length,
-    done: tasks.filter((t) => t.status === "done").length,
-    overdue: tasks.filter(
-      (t) => t.dueDate && isOverdue(t.dueDate) && t.status !== "done"
-    ).length,
-    today: tasks.filter((t) => t.dueDate === getToday() && t.status !== "done")
-      .length,
-  };
-
-  if (loading) {
+  if (isLoading) {
     return (
       <AppLayout>
         <div className="flex items-center justify-center h-64">
@@ -202,7 +122,9 @@ export default function TasksPage() {
           </div>
           <Select
             value={filterPriority}
-            onValueChange={(value: any) => setFilterPriority(value)}
+            onValueChange={(value) =>
+              setFilterPriority(value as "all" | "high" | "medium" | "low")
+            }
           >
             <SelectTrigger className="w-full sm:w-48">
               <Filter className="h-4 w-4 mr-2" />
@@ -217,7 +139,9 @@ export default function TasksPage() {
           </Select>
           <Select
             value={filterStatus}
-            onValueChange={(value: any) => setFilterStatus(value)}
+            onValueChange={(value) =>
+              setFilterStatus(value as "all" | "todo" | "doing" | "done")
+            }
           >
             <SelectTrigger className="w-full sm:w-48">
               <SelectValue />
@@ -235,19 +159,20 @@ export default function TasksPage() {
         <Tabs defaultValue="all" className="w-full">
           <TabsList className="grid w-full grid-cols-3">
             <TabsTrigger value="all">
-              Todas ({getTasksByView("all").length})
+              Todas ({getFilteredTasks("all").length})
             </TabsTrigger>
             <TabsTrigger value="today">
-              Hoje ({getTasksByView("today").length})
+              Hoje ({getFilteredTasks("today").length})
             </TabsTrigger>
             <TabsTrigger value="upcoming">
-              Próximas ({getTasksByView("upcoming").length})
+              Próximas ({getFilteredTasks("upcoming").length})
             </TabsTrigger>
           </TabsList>
 
           {["all", "today", "upcoming"].map((view) => (
             <TabsContent key={view} value={view} className="mt-6">
-              {getTasksByView(view as any).length === 0 ? (
+              {getFilteredTasks(view as "all" | "today" | "upcoming").length ===
+              0 ? (
                 <div className="text-center py-12">
                   <CheckSquare className="h-16 w-16 mx-auto mb-4 text-muted-foreground opacity-50" />
                   <h3 className="text-lg font-medium mb-2">
@@ -280,28 +205,30 @@ export default function TasksPage() {
                 </div>
               ) : (
                 <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
-                  {getTasksByView(view as any).map((task) => (
-                    <TaskCard
-                      key={task.id}
-                      task={task}
-                      onToggle={handleToggleTask}
-                      onEdit={handleEditTask}
-                      onDelete={(task) => (
-                        <ConfirmationModal
-                          title="Tem certeza absoluta?"
-                          description={`Esta ação não pode ser desfeita. Isso irá permanentemente deletar a tarefa "${task.title}" e remover todos os seus dados.`}
-                          confirmText="DELETAR"
-                          confirmLabel="Deletar tarefa"
-                          onConfirm={() => handleDeleteTask(task)}
-                        >
-                          <div className="flex items-center w-full text-destructive">
-                            <Trash2 className="h-4 w-4 mr-2" />
-                            Excluir
-                          </div>
-                        </ConfirmationModal>
-                      )}
-                    />
-                  ))}
+                  {getFilteredTasks(view as "all" | "today" | "upcoming").map(
+                    (task) => (
+                      <TaskCard
+                        key={task.id}
+                        task={task}
+                        onToggle={toggleTask}
+                        onEdit={handleEditTask}
+                        onDelete={(task) => (
+                          <ConfirmationModal
+                            title="Tem certeza absoluta?"
+                            description={`Esta ação não pode ser desfeita. Isso irá permanentemente deletar a tarefa "${task.title}" e remover todos os seus dados.`}
+                            confirmText="DELETAR"
+                            confirmLabel="Deletar tarefa"
+                            onConfirm={() => removeTask(task)}
+                          >
+                            <div className="relative flex cursor-pointer select-none items-center rounded-sm px-2 py-1.5 text-sm outline-none transition-colors hover:bg-accent hover:text-accent-foreground data-[disabled]:pointer-events-none data-[disabled]:opacity-50 text-destructive w-full gap-2">
+                              <Trash2 className="h-4 w-4 mr-2" />
+                              Excluir
+                            </div>
+                          </ConfirmationModal>
+                        )}
+                      />
+                    )
+                  )}
                 </div>
               )}
             </TabsContent>

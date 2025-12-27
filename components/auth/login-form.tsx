@@ -35,8 +35,8 @@ export function LoginForm() {
     try {
       await signIn(email, password);
       router.push("/dashboard");
-    } catch (error: any) {
-      setError(error.message || "Erro ao fazer login");
+    } catch (error: unknown) {
+      setError(error instanceof Error ? error.message : "Erro ao fazer login");
     } finally {
       setLoading(false);
     }

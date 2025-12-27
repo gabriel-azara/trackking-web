@@ -4,14 +4,7 @@ import { Card, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Progress } from "@/components/ui/progress";
-import {
-  MoreHorizontal,
-  Edit,
-  Trash2,
-  Calendar,
-  Target,
-  Link,
-} from "lucide-react";
+import { MoreHorizontal, Edit, Calendar, Target } from "lucide-react";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -21,15 +14,17 @@ import {
 import type { Goal } from "@/lib/types";
 import { cn } from "@/lib/utils";
 import { getDaysUntil, isOverdue } from "@/lib/utils/date";
+import { COLORS } from "@/lib/constants";
 import * as LucideIcons from "lucide-react";
 
 interface GoalCardProps {
   goal: Goal;
   onEdit?: (goal: Goal) => void;
+  onArchive?: (goal: Goal) => void;
   onDelete?: (goal: Goal) => React.ReactNode;
 }
 
-export function GoalCard({ goal, onEdit, onDelete }: GoalCardProps) {
+export function GoalCard({ goal, onEdit, onArchive, onDelete }: GoalCardProps) {
   const getGoalProgress = () => {
     if (!goal.targetValue || !goal.progressValue) return 0;
     return Math.min((goal.progressValue / goal.targetValue) * 100, 100);
@@ -37,22 +32,22 @@ export function GoalCard({ goal, onEdit, onDelete }: GoalCardProps) {
 
   const getColorStyle = (color?: string) => {
     if (!color) return {};
+    const predefinedColor = COLORS.find((c) => c.value === color);
+    if (predefinedColor) {
+      return { backgroundColor: predefinedColor.hex };
+    }
     if (color.startsWith("#")) {
       return { backgroundColor: color };
     }
     return {};
   };
 
-  const getColorClass = (color?: string) => {
-    if (!color) return "bg-gray-500";
-    if (color.startsWith("#")) return "";
-    return `bg-${color}`;
-  };
-
   const renderIcon = (iconName?: string) => {
     if (!iconName) return <LucideIcons.TrendingUp className="h-5 w-5" />;
 
-    const IconComponent = (LucideIcons as any)[
+    const IconComponent = (
+      LucideIcons as unknown as Record<string, React.ElementType>
+    )[
       iconName
         .split("-")
         .map((word) => word.charAt(0).toUpperCase() + word.slice(1))
@@ -87,7 +82,7 @@ export function GoalCard({ goal, onEdit, onDelete }: GoalCardProps) {
         <div className="flex items-start justify-between mb-3">
           <div className="flex items-center space-x-3">
             <div
-              className={cn("w-3 h-3 rounded-full", getColorClass(goal.color))}
+              className={cn("w-3 h-3 rounded-full")}
               style={getColorStyle(goal.color)}
             />
             <div className="flex items-center space-x-2">
@@ -124,11 +119,13 @@ export function GoalCard({ goal, onEdit, onDelete }: GoalCardProps) {
                     Editar
                   </DropdownMenuItem>
                 )}
-                {onDelete && (
-                  <DropdownMenuItem asChild className="text-destructive">
-                    {onDelete(goal)}
+                {onArchive && (
+                  <DropdownMenuItem onClick={() => onArchive(goal)}>
+                    <LucideIcons.Archive className="h-4 w-4 mr-2" />
+                    {goal.archive ? "Desarquivar" : "Arquivar"}
                   </DropdownMenuItem>
                 )}
+                {onDelete && onDelete(goal)}
               </DropdownMenuContent>
             </DropdownMenu>
           </div>
@@ -158,7 +155,7 @@ export function GoalCard({ goal, onEdit, onDelete }: GoalCardProps) {
               </span>
             </div>
             <div className="flex flex-wrap gap-1">
-              {goal.milestones.slice(0, 3).map((milestone, index) => (
+              {goal.milestones.slice(0, 3).map((milestone) => (
                 <Badge key={milestone.id} variant="outline" className="text-xs">
                   {milestone.title}
                 </Badge>
@@ -172,13 +169,13 @@ export function GoalCard({ goal, onEdit, onDelete }: GoalCardProps) {
           </div>
         )}
 
-        {/* Linked Habits */}
-        {goal.linkedHabits && goal.linkedHabits.length > 0 && (
+        {/* Linked Habits temporarily disabled */}
+        {/* {goal.linkedHabits && goal.linkedHabits.length > 0 && (
           <div className="flex items-center space-x-2 text-xs text-muted-foreground">
             <Link className="h-3 w-3" />
             <span>{goal.linkedHabits.length} hábitos vinculados</span>
           </div>
-        )}
+        )} */}
       </CardContent>
     </Card>
   );

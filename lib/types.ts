@@ -63,6 +63,7 @@ export interface Goal extends BaseEntity {
   milestones?: { id: ID; title: string; value?: number; deadline?: string }[];
   progressValue?: number; // acumulado atual
   linkedHabits?: ID[]; // hábitos que alimentam a meta
+  archive?: boolean;
 }
 
 export interface Task extends BaseEntity {

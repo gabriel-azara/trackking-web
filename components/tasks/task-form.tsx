@@ -1,58 +1,71 @@
-"use client"
+"use client";
 
-import type React from "react"
+import type React from "react";
 
-import { useState } from "react"
-import { useRouter } from "next/navigation"
-import { Button } from "@/components/ui/button"
-import { Input } from "@/components/ui/input"
-import { Label } from "@/components/ui/label"
-import { Textarea } from "@/components/ui/textarea"
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
-import { Alert, AlertDescription } from "@/components/ui/alert"
-import { ColorPicker } from "../habits/color-picker"
-import { IconPicker } from "../habits/icon-picker"
-import { PrioritySelect } from "./priority-select"
-import { ChecklistManager } from "./checklist-manager"
-import { GoalProjectSelector } from "./goal-project-selector"
-import { TimeList } from "../habits/time-list"
-import type { Task } from "@/lib/types"
-import { createTask, updateTask } from "@/lib/firebase/tasks"
-import { useAuth } from "@/contexts/auth-context"
-import { Loader2 } from "lucide-react"
+import { useState } from "react";
+import { useRouter } from "next/navigation";
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
+import { Textarea } from "@/components/ui/textarea";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Alert, AlertDescription } from "@/components/ui/alert";
+import { ColorPicker } from "../habits/color-picker";
+import { IconPicker } from "../habits/icon-picker";
+import { PrioritySelect } from "./priority-select";
+import { ChecklistManager } from "./checklist-manager";
+import { GoalProjectSelector } from "./goal-project-selector";
+import { TimeList } from "../habits/time-list";
+import type { Task } from "@/lib/types";
+import { createTask, updateTask } from "@/lib/firebase/tasks";
+import { useAuth } from "@/contexts/auth-context";
+import { Loader2 } from "lucide-react";
 
 interface TaskFormProps {
-  task?: Task
-  onSuccess?: () => void
+  task?: Task;
+  onSuccess?: () => void;
 }
 
 export function TaskForm({ task, onSuccess }: TaskFormProps) {
-  const { user } = useAuth()
-  const router = useRouter()
-  const [loading, setLoading] = useState(false)
-  const [error, setError] = useState("")
+  const { user } = useAuth();
+  const router = useRouter();
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState("");
 
-  const [formData, setFormData] = useState({
+  const [formData, setFormData] = useState<{
+    title: string;
+    description: string;
+    color: string;
+    icon: string;
+    dueDate: string;
+    dueTime: string;
+    priority: Task["priority"];
+    status: Task["status"];
+    goalId: string | undefined;
+    projectId: string | undefined;
+    reminders: string[];
+    checklist: NonNullable<Task["checklist"]>;
+  }>({
     title: task?.title || "",
     description: task?.description || "",
     color: task?.color || "blue-500",
     icon: task?.icon || "check-square",
     dueDate: task?.dueDate || "",
     dueTime: task?.dueTime || "",
-    priority: task?.priority || ("medium" as const),
-    status: task?.status || ("todo" as const),
-    goalId: task?.goalId || "",
-    projectId: task?.projectId || "",
+    priority: task?.priority || "medium",
+    status: task?.status || "todo",
+    goalId: task?.goalId || undefined,
+    projectId: task?.projectId || undefined,
     reminders: task?.reminders || [],
     checklist: task?.checklist || [],
-  })
+  });
 
   const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault()
-    if (!user) return
+    e.preventDefault();
+    if (!user) return;
 
-    setLoading(true)
-    setError("")
+    setLoading(true);
+    setError("");
 
     try {
       const taskData = {
@@ -66,28 +79,32 @@ export function TaskForm({ task, onSuccess }: TaskFormProps) {
         status: formData.status,
         goalId: formData.goalId || undefined,
         projectId: formData.projectId || undefined,
-        reminders: formData.reminders.length > 0 ? formData.reminders : undefined,
-        checklist: formData.checklist.length > 0 ? formData.checklist : undefined,
+        reminders:
+          formData.reminders.length > 0 ? formData.reminders : undefined,
+        checklist:
+          formData.checklist.length > 0 ? formData.checklist : undefined,
         type: "task" as const,
-      }
+      };
 
       if (task) {
-        await updateTask(user.uid, task.id, taskData)
+        await updateTask(user.uid, task.id, taskData);
       } else {
-        await createTask(user.uid, taskData)
+        await createTask(user.uid, taskData);
       }
 
       if (onSuccess) {
-        onSuccess()
+        onSuccess();
       } else {
-        router.push("/tasks")
+        router.push("/tasks");
       }
-    } catch (error: any) {
-      setError(error.message || "Erro ao salvar tarefa")
+    } catch (error) {
+      setError(
+        error instanceof Error ? error.message : "Erro ao salvar tarefa"
+      );
     } finally {
-      setLoading(false)
+      setLoading(false);
     }
-  }
+  };
 
   return (
     <form onSubmit={handleSubmit} className="space-y-6">
@@ -107,7 +124,9 @@ export function TaskForm({ task, onSuccess }: TaskFormProps) {
             <Input
               id="title"
               value={formData.title}
-              onChange={(e) => setFormData({ ...formData, title: e.target.value })}
+              onChange={(e) =>
+                setFormData({ ...formData, title: e.target.value })
+              }
               placeholder="Ex: Comprar ingredientes, Revisar relatório, Ligar para cliente"
               required
             />
@@ -118,7 +137,9 @@ export function TaskForm({ task, onSuccess }: TaskFormProps) {
             <Textarea
               id="description"
               value={formData.description}
-              onChange={(e) => setFormData({ ...formData, description: e.target.value })}
+              onChange={(e) =>
+                setFormData({ ...formData, description: e.target.value })
+              }
               placeholder="Descreva os detalhes da tarefa (opcional)"
               rows={3}
             />
@@ -151,7 +172,9 @@ export function TaskForm({ task, onSuccess }: TaskFormProps) {
                 id="dueDate"
                 type="date"
                 value={formData.dueDate}
-                onChange={(e) => setFormData({ ...formData, dueDate: e.target.value })}
+                onChange={(e) =>
+                  setFormData({ ...formData, dueDate: e.target.value })
+                }
               />
             </div>
             <div className="space-y-2">
@@ -160,12 +183,17 @@ export function TaskForm({ task, onSuccess }: TaskFormProps) {
                 id="dueTime"
                 type="time"
                 value={formData.dueTime}
-                onChange={(e) => setFormData({ ...formData, dueTime: e.target.value })}
+                onChange={(e) =>
+                  setFormData({ ...formData, dueTime: e.target.value })
+                }
               />
             </div>
           </div>
 
-          <PrioritySelect value={formData.priority} onChange={(priority) => setFormData({ ...formData, priority })} />
+          <PrioritySelect
+            value={formData.priority}
+            onChange={(priority) => setFormData({ ...formData, priority })}
+          />
         </CardContent>
       </Card>
 
@@ -190,7 +218,9 @@ export function TaskForm({ task, onSuccess }: TaskFormProps) {
             goalId={formData.goalId}
             projectId={formData.projectId}
             onGoalChange={(goalId) => setFormData({ ...formData, goalId })}
-            onProjectChange={(projectId) => setFormData({ ...formData, projectId })}
+            onProjectChange={(projectId) =>
+              setFormData({ ...formData, projectId })
+            }
           />
         </CardContent>
       </Card>
@@ -209,7 +239,12 @@ export function TaskForm({ task, onSuccess }: TaskFormProps) {
       </Card>
 
       <div className="flex justify-end space-x-4">
-        <Button type="button" variant="outline" onClick={() => router.back()} disabled={loading}>
+        <Button
+          type="button"
+          variant="outline"
+          onClick={() => router.back()}
+          disabled={loading}
+        >
           Cancelar
         </Button>
         <Button type="submit" disabled={loading}>
@@ -218,5 +253,5 @@ export function TaskForm({ task, onSuccess }: TaskFormProps) {
         </Button>
       </div>
     </form>
-  )
+  );
 }

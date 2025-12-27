@@ -17,7 +17,11 @@ import { Badge } from "@/components/ui/badge";
 import { Alert, AlertDescription } from "@/components/ui/alert";
 import { Plus, Search, Filter, TrendingUp, Trash2 } from "lucide-react";
 import { useAuth } from "@/contexts/auth-context";
-import { subscribeToUserGoals, deleteGoal } from "@/lib/firebase/goals";
+import {
+  subscribeToUserGoals,
+  deleteGoal,
+  updateGoal,
+} from "@/lib/firebase/goals";
 import type { Goal } from "@/lib/types";
 import { isOverdue } from "@/lib/utils/date";
 import { ConfirmationModal } from "@/components/modal";
@@ -29,8 +33,8 @@ export default function GoalsPage() {
   const [loading, setLoading] = useState(true);
   const [searchTerm, setSearchTerm] = useState("");
   const [filterStatus, setFilterStatus] = useState<
-    "all" | "active" | "completed" | "overdue"
-  >("all");
+    "all" | "active" | "completed" | "overdue" | "archived"
+  >("active");
   const [error, setError] = useState("");
 
   useEffect(() => {
@@ -53,8 +57,20 @@ export default function GoalsPage() {
 
     try {
       await deleteGoal(user.uid, goal.id);
-    } catch (error: any) {
-      setError(error.message || "Erro ao excluir meta");
+    } catch (error) {
+      setError(error instanceof Error ? error.message : "Erro ao excluir meta");
+    }
+  };
+
+  const handleArchiveGoal = async (goal: Goal) => {
+    if (!user) return;
+
+    try {
+      await updateGoal(user.uid, goal.id, { archive: !goal.archive });
+    } catch (error) {
+      setError(
+        error instanceof Error ? error.message : "Erro ao arquivar meta"
+      );
     }
   };
 
@@ -68,14 +84,23 @@ export default function GoalsPage() {
       goal.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
       goal.description?.toLowerCase().includes(searchTerm.toLowerCase());
 
-    const progress = getGoalProgress(goal);
-    const overdue = goal.deadline ? isOverdue(goal.deadline) : false;
-
     const matchesFilter =
-      filterStatus === "all" ||
-      (filterStatus === "active" && progress < 100 && !overdue) ||
-      (filterStatus === "completed" && progress >= 100) ||
-      (filterStatus === "overdue" && overdue);
+      filterStatus === "all"
+        ? true
+        : filterStatus === "active"
+        ? (!goal.targetValue || (goal.progressValue ?? 0) < goal.targetValue) &&
+          !isOverdue(goal.deadline || "") &&
+          !goal.archive
+        : filterStatus === "completed"
+        ? goal.targetValue &&
+          goal.progressValue &&
+          goal.progressValue >= goal.targetValue &&
+          !goal.archive
+        : filterStatus === "overdue"
+        ? isOverdue(goal.deadline || "") && !goal.archive
+        : filterStatus === "archived"
+        ? goal.archive
+        : true;
 
     return matchesSearch && matchesFilter;
   });
@@ -150,7 +175,11 @@ export default function GoalsPage() {
           </div>
           <Select
             value={filterStatus}
-            onValueChange={(value: any) => setFilterStatus(value)}
+            onValueChange={(value) =>
+              setFilterStatus(
+                value as "all" | "active" | "completed" | "overdue"
+              )
+            }
           >
             <SelectTrigger className="w-full sm:w-48">
               <Filter className="h-4 w-4 mr-2" />
@@ -161,6 +190,7 @@ export default function GoalsPage() {
               <SelectItem value="active">Apenas ativas</SelectItem>
               <SelectItem value="completed">Apenas concluídas</SelectItem>
               <SelectItem value="overdue">Apenas atrasadas</SelectItem>
+              <SelectItem value="archived">Apenas arquivadas</SelectItem>
             </SelectContent>
           </Select>
         </div>
@@ -193,6 +223,7 @@ export default function GoalsPage() {
                 key={goal.id}
                 goal={goal}
                 onEdit={handleEditGoal}
+                onArchive={handleArchiveGoal}
                 onDelete={(goal) => (
                   <ConfirmationModal
                     title="Tem certeza absoluta?"
@@ -201,7 +232,7 @@ export default function GoalsPage() {
                     confirmLabel="Deletar meta"
                     onConfirm={() => handleDeleteGoal(goal)}
                   >
-                    <div className="flex items-center w-full text-destructive">
+                    <div className="relative flex cursor-pointer select-none items-center rounded-sm px-2 py-1.5 text-sm outline-none transition-colors hover:bg-accent hover:text-accent-foreground data-[disabled]:pointer-events-none data-[disabled]:opacity-50 text-destructive w-full gap-2">
                       <Trash2 className="h-4 w-4 mr-2" />
                       Excluir
                     </div>

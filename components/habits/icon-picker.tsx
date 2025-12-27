@@ -1,67 +1,85 @@
-"use client"
+"use client";
 
-import { useState } from "react"
-import { Button } from "@/components/ui/button"
-import { Input } from "@/components/ui/input"
-import { Label } from "@/components/ui/label"
-import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover"
-import { ScrollArea } from "@/components/ui/scroll-area"
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
-import { ICONS } from "@/lib/constants"
-import { Search } from "lucide-react"
-import * as LucideIcons from "lucide-react"
+import { useState } from "react";
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
+import {
+  Popover,
+  PopoverContent,
+  PopoverTrigger,
+} from "@/components/ui/popover";
+import { ScrollArea } from "@/components/ui/scroll-area";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { ICONS } from "@/lib/constants";
+import { Search } from "lucide-react";
+import * as LucideIcons from "lucide-react";
 
 interface IconPickerProps {
-  value?: string
-  onChange: (icon: string) => void
-  label?: string
+  value?: string;
+  onChange: (icon: string) => void;
+  label?: string;
 }
 
-export function IconPicker({ value, onChange, label = "Ícone" }: IconPickerProps) {
-  const [search, setSearch] = useState("")
-  const [isOpen, setIsOpen] = useState(false)
+export function IconPicker({
+  value,
+  onChange,
+  label = "Ícone",
+}: IconPickerProps) {
+  const [search, setSearch] = useState("");
+  const [isOpen, setIsOpen] = useState(false);
 
-  const categories = [...new Set(ICONS.map((icon) => icon.category))]
+  const categories = [...new Set(ICONS.map((icon) => icon.category))];
 
   const filteredIcons = ICONS.filter(
     (icon) =>
-      icon.label.toLowerCase().includes(search.toLowerCase()) || icon.name.toLowerCase().includes(search.toLowerCase()),
-  )
+      icon.label.toLowerCase().includes(search.toLowerCase()) ||
+      icon.name.toLowerCase().includes(search.toLowerCase())
+  );
 
   const getIconsByCategory = (category: string) => {
-    return filteredIcons.filter((icon) => icon.category === category)
-  }
+    return filteredIcons.filter((icon) => icon.category === category);
+  };
 
   const handleIconSelect = (iconName: string) => {
-    onChange(iconName)
-    setIsOpen(false)
-  }
+    onChange(iconName);
+    setIsOpen(false);
+  };
 
   const renderIcon = (iconName: string) => {
-    const IconComponent = (LucideIcons as any)[
+    const IconComponent = (
+      LucideIcons as unknown as Record<string, React.ElementType>
+    )[
       iconName
         .split("-")
         .map((word) => word.charAt(0).toUpperCase() + word.slice(1))
         .join("")
         .replace(/[^a-zA-Z0-9]/g, "")
-    ]
+    ];
 
     if (IconComponent) {
-      return <IconComponent className="h-5 w-5" />
+      return <IconComponent className="h-5 w-5" />;
     }
-    return <LucideIcons.Circle className="h-5 w-5" />
-  }
+    return <LucideIcons.Circle className="h-5 w-5" />;
+  };
 
-  const selectedIcon = ICONS.find((icon) => icon.name === value)
+  const selectedIcon = ICONS.find((icon) => icon.name === value);
 
   return (
     <div className="space-y-2">
       <Label>{label}</Label>
       <Popover open={isOpen} onOpenChange={setIsOpen}>
         <PopoverTrigger asChild>
-          <Button variant="outline" className="w-full justify-start bg-transparent">
+          <Button
+            variant="outline"
+            className="w-full justify-start bg-transparent"
+          >
             <div className="flex items-center space-x-2">
-              {value ? renderIcon(value) : <LucideIcons.Circle className="h-5 w-5" />}
+              {value ? (
+                renderIcon(value)
+              ) : (
+                <LucideIcons.Circle className="h-5 w-5" />
+              )}
               <span>{selectedIcon?.label || "Selecionar ícone"}</span>
             </div>
           </Button>
@@ -81,7 +99,11 @@ export function IconPicker({ value, onChange, label = "Ícone" }: IconPickerProp
             <Tabs defaultValue={categories[0]} className="w-full">
               <TabsList className="grid w-full grid-cols-3">
                 {categories.slice(0, 3).map((category) => (
-                  <TabsTrigger key={category} value={category} className="text-xs">
+                  <TabsTrigger
+                    key={category}
+                    value={category}
+                    className="text-xs"
+                  >
                     {category}
                   </TabsTrigger>
                 ))}
@@ -95,7 +117,7 @@ export function IconPicker({ value, onChange, label = "Ícone" }: IconPickerProp
                         <button
                           key={icon.name}
                           onClick={() => handleIconSelect(icon.name)}
-                          className="p-2 rounded hover:bg-accent hover:text-accent-foreground"
+                          className="cursor-pointer p-2 rounded hover:bg-accent hover:text-accent-foreground"
                           title={icon.label}
                         >
                           {renderIcon(icon.name)}
@@ -110,5 +132,5 @@ export function IconPicker({ value, onChange, label = "Ícone" }: IconPickerProp
         </PopoverContent>
       </Popover>
     </div>
-  )
+  );
 }
