@@ -1,6 +1,7 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
+import { useTheme } from "next-themes";
 import {
   Card,
   CardContent,
@@ -15,8 +16,9 @@ import { Button } from "@/components/ui/button";
 import { Monitor, Moon, Sun, Save } from "lucide-react";
 
 export function ThemeSettings() {
+  const { theme, setTheme } = useTheme();
+  const [mounted, setMounted] = useState(false);
   const [settings, setSettings] = useState({
-    theme: "system",
     reducedMotion: false,
     highContrast: false,
     compactMode: false,
@@ -24,9 +26,9 @@ export function ThemeSettings() {
 
   const [isLoading, setIsLoading] = useState(false);
 
-  const handleThemeChange = (value: string) => {
-    setSettings((prev) => ({ ...prev, theme: value }));
-  };
+  useEffect(() => {
+    setMounted(true);
+  }, []);
 
   const handleToggle = (key: string) => {
     setSettings((prev) => ({
@@ -42,6 +44,11 @@ export function ThemeSettings() {
     setIsLoading(false);
   };
 
+  // Prevent hydration mismatch
+  if (!mounted) {
+    return null;
+  }
+
   return (
     <Card>
       <CardHeader>
@@ -52,7 +59,7 @@ export function ThemeSettings() {
         {/* Tema */}
         <div className="space-y-4">
           <Label className="text-sm font-medium">Tema</Label>
-          <RadioGroup value={settings.theme} onValueChange={handleThemeChange}>
+          <RadioGroup value={theme} onValueChange={setTheme}>
             <div className="flex items-center space-x-3">
               <RadioGroupItem value="light" id="light" />
               <Label
