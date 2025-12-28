@@ -31,13 +31,17 @@ i18next
   });
 
 export function useTranslation(
-  lng: string,
+  lng?: string,
   ns?: string,
   options: Record<string, unknown> = {}
 ) {
   const [cookies, setCookie] = useCookies([cookieName]);
   const ret = useTranslationOrg(ns, options);
   const { i18n } = ret;
+
+  // Initialize with cookie or default if available and no specific lng passed
+  // effectively relying on i18n.language which should be detected
+
   const [activeLng, setActiveLng] = useState(i18n.resolvedLanguage);
 
   if (runsOnServerSide && lng && i18n.resolvedLanguage !== lng) {
@@ -50,14 +54,15 @@ export function useTranslation(
   }, [activeLng, i18n.resolvedLanguage]);
 
   useEffect(() => {
-    if (!lng || i18n.resolvedLanguage === lng) return;
-    i18n.changeLanguage(lng);
+    if (lng && i18n.resolvedLanguage !== lng) {
+      i18n.changeLanguage(lng);
+    }
   }, [lng, i18n]);
 
   useEffect(() => {
-    if (cookies.i18next === lng) return;
-    setCookie(cookieName, lng, { path: "/" });
-  }, [lng, cookies.i18next, setCookie]);
+    if (cookies.i18next === activeLng) return;
+    setCookie(cookieName, activeLng, { path: "/" });
+  }, [activeLng, cookies.i18next, setCookie]);
 
   return ret;
 }

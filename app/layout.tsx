@@ -2,10 +2,8 @@ import type React from "react";
 import type { Metadata } from "next";
 import { GeistSans } from "geist/font/sans";
 import { GeistMono } from "geist/font/mono";
-import "../globals.css";
+import "./globals.css";
 import { Providers } from "@/components/providers";
-import { dir } from "i18next";
-import { languages } from "../i18n/settings";
 
 export const metadata: Metadata = {
   title: "HabitsGoals - Gerencie seus hábitos, metas e tarefas",
@@ -14,21 +12,13 @@ export const metadata: Metadata = {
   generator: "v0.app",
 };
 
-export async function generateStaticParams() {
-  return languages.map((lng) => ({ lng }));
-}
-
-export default async function RootLayout({
+export default function RootLayout({
   children,
-  params,
 }: Readonly<{
   children: React.ReactNode;
-  params: Promise<{ lng: string }>;
 }>) {
-  const { lng } = await params;
-
   return (
-    <html lang={lng} dir={dir(lng)} suppressHydrationWarning>
+    <html lang="pt-BR" suppressHydrationWarning>
       <head>
         <style>{`
 html {

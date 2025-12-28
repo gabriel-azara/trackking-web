@@ -1,0 +1,190 @@
+{
+  "common": {
+    "save": "Salvar",
+    "cancel": "Cancelar",
+    "delete": "Excluir",
+    "edit": "Editar",
+    "create": "Criar",
+    "loading": "Carregando...",
+    "actions": "Ações",
+    "back": "Voltar"
+  },
+  "home": {
+    "features": {
+      "habits_desc": "Crie hábitos recorrentes com rastreamento personalizado e acompanhe sequências",
+      "goals_desc": "Defina metas com prazos e marcos, acompanhe o progresso em tempo real",
+      "tasks_desc": "Organize tarefas pontuais com prioridades e listas de verificação detalhadas",
+      "reports_desc": "Visualize seu progresso com gráficos e mapas de calor detalhados"
+    },
+    "cta": {
+      "title": "Pronto para começar?",
+      "description": "Junte-se a milhares de pessoas que já transformaram suas vidas",
+      "button": "Criar Conta Grátis"
+    }
+  },
+  "app": {
+    "subtitle": "Gerencie seus hábitos, metas e tarefas",
+    "hero_description": "Transforme sua vida com gerenciamento inteligente de hábitos, metas e tarefas. Acompanhe seu progresso e conquiste seus objetivos."
+  },
+  "dashboard": {
+    "title": "Dashboard",
+    "subtitle": "Acompanhe seu progresso e gerencie suas atividades",
+    "stats": {
+      "habits_today": "Hábitos Hoje",
+      "completed": "Concluídos",
+      "active_goals": "Metas Ativas",
+      "current_streak": "Sequência Atual"
+    },
+    "today_habits": "Hábitos de Hoje",
+    "goals_overview": "Visão Geral das Metas",
+    "quick_actions": "Ações Rápidas"
+  },
+  "sidebar": {
+    "dashboard": "Dashboard",
+    "goals": "Metas",
+    "habits": "Hábitos",
+    "tasks": "Tarefas",
+    "reports": "Relatórios",
+    "settings": "Configurações",
+    "logout": "Sair"
+  },
+  "settings_page": {
+    "title": "Configurações",
+    "description": "Gerencie suas preferências e configurações da conta",
+    "tabs": {
+      "profile": "Perfil",
+      "notifications": "Notificações",
+      "appearance": "Aparência",
+      "privacy": "Privacidade",
+      "account": "Conta"
+    },
+    "appearance": {
+      "title": "Aparência",
+      "description": "Personalize a aparência da aplicação",
+      "theme": {
+        "label": "Tema",
+        "light": "Claro",
+        "dark": "Escuro",
+        "system": "Sistema"
+      },
+      "language": "Idioma",
+      "accessibility": {
+        "title": "Acessibilidade",
+        "reduced_motion": "Reduzir animações",
+        "high_contrast": "Alto contraste"
+      },
+      "layout": {
+        "title": "Layout",
+        "compact_mode": "Modo compacto"
+      },
+      "save": "Salvar configurações",
+      "saving": "Salvando..."
+    },
+    "profile": {
+      "title": "Perfil",
+      "description": "Gerencie suas informações pessoais",
+      "avatar": { "change": "Alterar foto" },
+      "form": {
+        "name": "Nome completo",
+        "name_placeholder": "Seu nome completo",
+        "email": "Email",
+        "email_placeholder": "seu@email.com",
+        "bio": "Bio",
+        "bio_placeholder": "Conte um pouco sobre você...",
+        "save": "Salvar alterações",
+        "saving": "Salvando..."
+      }
+    },
+    "notifications": {
+      "title": "Notificações",
+      "description": "Configure como e quando você quer ser notificado",
+      "types": {
+        "title": "Tipos de notificação",
+        "habit_reminders": "Lembretes de hábitos",
+        "goal_deadlines": "Prazos de metas",
+        "task_due_dates": "Vencimento de tarefas",
+        "weekly_reports": "Relatórios semanais",
+        "achievements": "Conquistas e marcos"
+      },
+      "channels": {
+        "title": "Canais de notificação",
+        "email": "Notificações por email",
+        "push": "Notificações push"
+      },
+      "schedule": {
+        "title": "Horários",
+        "reminder_time": "Horário dos lembretes",
+        "frequency": "Frequência dos relatórios",
+        "daily": "Diário",
+        "weekly": "Semanal",
+        "monthly": "Mensal",
+        "never": "Nunca"
+      },
+      "save": "Salvar configurações",
+      "saving": "Salvando..."
+    },
+    "privacy": {
+      "title": "Privacidade e Dados",
+      "description": "Controle como seus dados são usados e compartilhados",
+      "visibility": {
+        "title": "Visibilidade",
+        "profile_label": "Visibilidade do perfil",
+        "public": "Público",
+        "friends": "Apenas amigos",
+        "private": "Privado",
+        "share_progress": "Compartilhar progresso publicamente"
+      },
+      "data_collection": {
+        "title": "Coleta de dados",
+        "analytics": "Permitir análise de uso",
+        "improvements": "Coleta de dados para melhorias",
+        "third_party": "Compartilhamento com terceiros"
+      },
+      "data_management": {
+        "title": "Seus dados",
+        "export": "Exportar dados",
+        "import": "Importar dados"
+      },
+      "save": "Salvar configurações",
+      "saving": "Salvando..."
+    },
+    "account": {
+      "title": "Zona de Perigo",
+      "description": "Ações irreversíveis que afetam permanentemente sua conta",
+      "delete_account": {
+        "title": "Deletar conta",
+        "description": "Esta ação não pode ser desfeita. Todos os seus dados, incluindo hábitos, metas, tarefas e progresso serão permanentemente removidos.",
+        "button": "Deletar conta",
+        "dialog": {
+          "title": "Tem certeza absoluta?",
+          "description_1": "Esta ação não pode ser desfeita. Isso irá permanentemente deletar sua conta e remover todos os seus dados de nossos servidores.",
+          "description_2": "Para confirmar, digite DELETAR no campo abaixo:",
+          "input_label": "Digite \"DELETAR\" para confirmar.",
+          "input_placeholder": "DELETAR",
+          "cancel": "Cancelar",
+          "confirm": "Deletar conta",
+          "deleting": "Deletando..."
+        }
+      }
+    }
+  },
+  "auth": {
+    "login": {
+      "title": "Entrar",
+      "description": "Entre com seu email para acessar sua conta",
+      "submit": "Entrar",
+      "no_account": "Não tem uma conta?",
+      "signup": "Cadastre-se",
+      "email": "Email",
+      "password": "Senha",
+      "error": "Erro ao fazer login"
+    },
+    "signup": {
+      "title": "Criar conta",
+      "description": "Entre com seu email abaixo para criar sua conta",
+      "submit": "Cadastrar",
+      "has_account": "Já tem uma conta?",
+      "login_link": "Entrar"
+    }
+  }
+}

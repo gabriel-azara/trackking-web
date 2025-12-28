@@ -2,7 +2,7 @@
 
 import { useState } from "react";
 import Link from "next/link";
-import { usePathname, useParams } from "next/navigation";
+import { usePathname } from "next/navigation";
 import { cn } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
 import { ScrollArea } from "@/components/ui/scroll-area";
@@ -28,9 +28,7 @@ export function Sidebar({ className }: SidebarProps) {
   const pathname = usePathname();
   const { userProfile, signOut } = useAuth();
   const [isCollapsed, setIsCollapsed] = useState(false);
-  const params = useParams();
-  const lng = params.lng as string;
-  const { t } = useTranslation(lng);
+  const { t } = useTranslation();
 
   const navigation = [
     {
@@ -95,7 +93,7 @@ export function Sidebar({ className }: SidebarProps) {
       <ScrollArea className="flex-1 px-3 py-4">
         <nav className="space-y-2">
           {navigation.map((item) => {
-            const linkHref = `/${lng}${item.href}`;
+            const linkHref = item.href;
             // Check if pathname matches the link href (handling potential trailing slash or sub-paths if strict)
             // Or simply strict match for now
             const isActive =

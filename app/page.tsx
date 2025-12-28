@@ -1,6 +1,6 @@
 "use client";
 import { useEffect } from "react";
-import { useRouter, useParams } from "next/navigation";
+import { useRouter } from "next/navigation";
 import { useAuth } from "@/contexts/auth-context";
 import { Button } from "@/components/ui/button";
 import {
@@ -12,20 +12,20 @@ import {
 } from "@/components/ui/card";
 import { Target, CheckCircle, Calendar, TrendingUp } from "lucide-react";
 import Link from "next/link";
-import { useTranslation } from "../i18n/client";
+import { useTranslation } from "react-i18next";
+
+import { LanguageSelector } from "@/components/language-selector";
 
 export default function HomePage() {
   const { user, loading } = useAuth();
   const router = useRouter();
-  const params = useParams();
-  const lng = params.lng as string;
-  const { t } = useTranslation(lng);
+  const { t } = useTranslation();
 
   useEffect(() => {
     if (!loading && user) {
-      router.push(`/${lng}/dashboard`);
+      router.push("/dashboard");
     }
-  }, [user, loading, router, lng]);
+  }, [user, loading, router]);
 
   if (loading) {
     return (
@@ -36,7 +36,10 @@ export default function HomePage() {
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-blue-50 to-indigo-100 dark:from-gray-900 dark:to-gray-800">
+    <div className="min-h-screen bg-gradient-to-br from-blue-50 to-indigo-100 dark:from-gray-900 dark:to-gray-800 relative">
+      <div className="absolute top-4 right-4 z-10">
+        <LanguageSelector />
+      </div>
       {/* Hero Section */}
       <div className="container mx-auto px-4 py-16">
         <div className="text-center mb-16">
@@ -45,13 +48,13 @@ export default function HomePage() {
           </h1>
           <p className="text-xl text-gray-600 dark:text-gray-400 mb-8 max-w-2xl mx-auto">
             {t(
-              "heroable_description",
-              "Transform your life with intelligent management of habits, goals and tasks. Track your progress and achieve your goals."
+              "app.hero_description",
+              "Transforme sua vida com gerenciamento inteligente de hábitos, metas e tarefas. Acompanhe seu progresso e conquiste seus objetivos."
             )}
           </p>
           <div className="flex flex-col sm:flex-row gap-4 justify-center">
             <Button asChild size="lg" className="text-lg px-8">
-              <Link href={`/${lng}/auth/signup`}>
+              <Link href="/auth/signup">
                 {t("auth.signup.submit", "Get Started")}
               </Link>
             </Button>
@@ -61,9 +64,7 @@ export default function HomePage() {
               size="lg"
               className="text-lg px-8 bg-transparent"
             >
-              <Link href={`/${lng}/auth/login`}>
-                {t("auth.login.submit", "Login")}
-              </Link>
+              <Link href="/auth/login">{t("auth.login.submit", "Login")}</Link>
             </Button>
           </div>
         </div>
@@ -78,7 +79,7 @@ export default function HomePage() {
             <CardContent>
               <CardDescription>
                 {t(
-                  "Create recurring habits with custom tracking and track streaks",
+                  "home.features.habits_desc",
                   "Create recurring habits with custom tracking and track streaks"
                 )}
               </CardDescription>
@@ -93,7 +94,7 @@ export default function HomePage() {
             <CardContent>
               <CardDescription>
                 {t(
-                  "Define goals with deadlines and milestones, track progress in real time",
+                  "home.features.goals_desc",
                   "Define goals with deadlines and milestones, track progress in real time"
                 )}
               </CardDescription>
@@ -108,7 +109,7 @@ export default function HomePage() {
             <CardContent>
               <CardDescription>
                 {t(
-                  "Organize one-off tasks with priorities and detailed checklists",
+                  "home.features.tasks_desc",
                   "Organize one-off tasks with priorities and detailed checklists"
                 )}
               </CardDescription>
@@ -123,7 +124,7 @@ export default function HomePage() {
             <CardContent>
               <CardDescription>
                 {t(
-                  "Visualize your progress with detailed charts and heatmaps",
+                  "home.features.reports_desc",
                   "Visualize your progress with detailed charts and heatmaps"
                 )}
               </CardDescription>
@@ -136,19 +137,19 @@ export default function HomePage() {
           <Card className="max-w-2xl mx-auto">
             <CardHeader>
               <CardTitle className="text-2xl">
-                {t("Ready to start?", "Ready to start?")}
+                {t("home.cta.title", "Ready to start?")}
               </CardTitle>
               <CardDescription className="text-lg">
                 {t(
-                  "Join thousands of people who have already transformed their lives",
+                  "home.cta.description",
                   "Join thousands of people who have already transformed their lives"
                 )}
               </CardDescription>
             </CardHeader>
             <CardContent>
               <Button asChild size="lg" className="text-lg px-12">
-                <Link href={`/${lng}/auth/signup`}>
-                  {t("Create Free Account", "Create Free Account")}
+                <Link href="/auth/signup">
+                  {t("home.cta.button", "Create Free Account")}
                 </Link>
               </Button>
             </CardContent>

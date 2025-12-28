@@ -1,0 +1,190 @@
+{
+  "common": {
+    "save": "Save",
+    "cancel": "Cancel",
+    "delete": "Delete",
+    "edit": "Edit",
+    "create": "Create",
+    "loading": "Loading...",
+    "actions": "Actions",
+    "back": "Back"
+  },
+  "home": {
+    "features": {
+      "habits_desc": "Create recurring habits with custom tracking and track streaks",
+      "goals_desc": "Define goals with deadlines and milestones, track progress in real time",
+      "tasks_desc": "Organize one-off tasks with priorities and detailed checklists",
+      "reports_desc": "Visualize your progress with detailed charts and heatmaps"
+    },
+    "cta": {
+      "title": "Ready to start?",
+      "description": "Join thousands of people who have already transformed their lives",
+      "button": "Create Free Account"
+    }
+  },
+  "app": {
+    "subtitle": "Manage your habits, goals and tasks",
+    "hero_description": "Transform your life with intelligent management of habits, goals and tasks. Track your progress and achieve your goals."
+  },
+  "dashboard": {
+    "title": "Dashboard",
+    "subtitle": "Track your progress and manage your activities",
+    "stats": {
+      "habits_today": "Habits Today",
+      "completed": "Completed",
+      "active_goals": "Active Goals",
+      "current_streak": "Current Streak"
+    },
+    "today_habits": "Today's Habits",
+    "goals_overview": "Goals Overview",
+    "quick_actions": "Quick Actions"
+  },
+  "sidebar": {
+    "dashboard": "Dashboard",
+    "goals": "Goals",
+    "habits": "Habits",
+    "tasks": "Tasks",
+    "reports": "Reports",
+    "settings": "Settings",
+    "logout": "Logout"
+  },
+  "settings_page": {
+    "title": "Settings",
+    "description": "Manage your preferences and account settings",
+    "tabs": {
+      "profile": "Profile",
+      "notifications": "Notifications",
+      "appearance": "Appearance",
+      "privacy": "Privacy",
+      "account": "Account"
+    },
+    "appearance": {
+      "title": "Appearance",
+      "description": "Customize the application appearance",
+      "theme": {
+        "label": "Theme",
+        "light": "Light",
+        "dark": "Dark",
+        "system": "System"
+      },
+      "language": "Language",
+      "accessibility": {
+        "title": "Accessibility",
+        "reduced_motion": "Reduce motion",
+        "high_contrast": "High contrast"
+      },
+      "layout": {
+        "title": "Layout",
+        "compact_mode": "Compact mode"
+      },
+      "save": "Save settings",
+      "saving": "Saving..."
+    },
+    "profile": {
+      "title": "Profile",
+      "description": "Manage your personal information",
+      "avatar": { "change": "Change photo" },
+      "form": {
+        "name": "Full Name",
+        "name_placeholder": "Your full name",
+        "email": "Email",
+        "email_placeholder": "your@email.com",
+        "bio": "Bio",
+        "bio_placeholder": "Tell us a little about yourself...",
+        "save": "Save changes",
+        "saving": "Saving..."
+      }
+    },
+    "notifications": {
+      "title": "Notifications",
+      "description": "Configure how and when you want to be notified",
+      "types": {
+        "title": "Notification types",
+        "habit_reminders": "Habit reminders",
+        "goal_deadlines": "Goal deadlines",
+        "task_due_dates": "Task due dates",
+        "weekly_reports": "Weekly reports",
+        "achievements": "Achievements and milestones"
+      },
+      "channels": {
+        "title": "Notification channels",
+        "email": "Email notifications",
+        "push": "Push notifications"
+      },
+      "schedule": {
+        "title": "Schedule",
+        "reminder_time": "Reminder time",
+        "frequency": "Report frequency",
+        "daily": "Daily",
+        "weekly": "Weekly",
+        "monthly": "Monthly",
+        "never": "Never"
+      },
+      "save": "Save settings",
+      "saving": "Saving..."
+    },
+    "privacy": {
+      "title": "Privacy and Data",
+      "description": "Control how your data is used and shared",
+      "visibility": {
+        "title": "Visibility",
+        "profile_label": "Profile visibility",
+        "public": "Public",
+        "friends": "Friends only",
+        "private": "Private",
+        "share_progress": "Share progress publicly"
+      },
+      "data_collection": {
+        "title": "Data collection",
+        "analytics": "Allow usage analysis",
+        "improvements": "Data collection for improvements",
+        "third_party": "Third-party sharing"
+      },
+      "data_management": {
+        "title": "Your data",
+        "export": "Export data",
+        "import": "Import data"
+      },
+      "save": "Save settings",
+      "saving": "Saving..."
+    },
+    "account": {
+      "title": "Danger Zone",
+      "description": "Irreversible actions that permanently affect your account",
+      "delete_account": {
+        "title": "Delete account",
+        "description": "This action cannot be undone. All your data, including habits, goals, tasks and progress will be permanently removed.",
+        "button": "Delete account",
+        "dialog": {
+          "title": "Are you absolutely sure?",
+          "description_1": "This action cannot be undone. This will permanently delete your account and remove all your data from our servers.",
+          "description_2": "To confirm, type DELETAR in the field below:",
+          "input_label": "Type \"DELETAR\" to confirm.",
+          "input_placeholder": "DELETAR",
+          "cancel": "Cancel",
+          "confirm": "Delete account",
+          "deleting": "Deleting..."
+        }
+      }
+    }
+  },
+  "auth": {
+    "login": {
+      "title": "Login",
+      "description": "Enter your email to login to your account",
+      "submit": "Sign In",
+      "no_account": "Don't have an account?",
+      "signup": "Sign up",
+      "email": "Email",
+      "password": "Password",
+      "error": "Error logging in"
+    },
+    "signup": {
+      "title": "Create an account",
+      "description": "Enter your email below to create your account",
+      "submit": "Sign Up",
+      "has_account": "Already have an account?",
+      "login_link": "Login"
+    }
+  }
+}

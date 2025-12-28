@@ -1,5 +1,5 @@
-export const fallbackLng = "pt";
-export const languages = [fallbackLng, "en"];
+export const fallbackLng = "pt-BR";
+export const languages = [fallbackLng, "en-US"];
 export const defaultNS = "translation";
 export const cookieName = "i18next";
 
