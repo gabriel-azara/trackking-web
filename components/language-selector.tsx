@@ -70,7 +70,7 @@ export function LanguageSelector() {
                 <CommandItem
                   key={language.value}
                   value={language.value}
-                  onSelect={(currentValue) => {
+                  onSelect={() => {
                     handleLanguageChange(language.value);
                   }}
                 >
