@@ -10,7 +10,7 @@ import { StatsOverview } from "@/components/reports/stats-overview";
 import { ProgressChart } from "@/components/reports/progress-chart";
 import { HabitHeatmap } from "@/components/reports/habit-heatmap";
 
-// Mock data - em produção, estes dados viriam do Firebase
+// Mock data - em produção, estes dados viriam do Firebase.
 const mockStats = {
   totalHabits: 12,
   activeHabits: 8,

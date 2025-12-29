@@ -19,6 +19,7 @@ import {
 import { Alert, AlertDescription } from "@/components/ui/alert";
 import { signIn } from "@/lib/firebase/auth";
 import { Loader2, Mail, Lock } from "lucide-react";
+import { useTranslation } from "@/app/i18n/client";
 
 export function LoginForm() {
   const [email, setEmail] = useState("");
@@ -26,6 +27,7 @@ export function LoginForm() {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
   const router = useRouter();
+  const { t } = useTranslation();
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -36,7 +38,11 @@ export function LoginForm() {
       await signIn(email, password);
       router.push("/dashboard");
     } catch (error: unknown) {
-      setError(error instanceof Error ? error.message : "Erro ao fazer login");
+      setError(
+        error instanceof Error
+          ? error.message
+          : t("auth.login.error", "Erro ao fazer login")
+      );
     } finally {
       setLoading(false);
     }
@@ -45,9 +51,14 @@ export function LoginForm() {
   return (
     <Card className="w-full max-w-md mx-auto">
       <CardHeader className="space-y-1">
-        <CardTitle className="text-2xl font-bold text-center">Entrar</CardTitle>
+        <CardTitle className="text-2xl font-bold text-center">
+          {t("auth.login.title", "Entrar")}
+        </CardTitle>
         <CardDescription className="text-center">
-          Entre com seu email e senha para acessar sua conta
+          {t(
+            "auth.login.description",
+            "Entre com seu email e senha para acessar sua conta"
+          )}
         </CardDescription>
       </CardHeader>
       <form onSubmit={handleSubmit}>
@@ -59,7 +70,7 @@ export function LoginForm() {
           )}
 
           <div className="space-y-2">
-            <Label htmlFor="email">Email</Label>
+            <Label htmlFor="email">{t("auth.login.email", "Email")}</Label>
             <div className="relative">
               <Mail className="absolute left-3 top-3 h-4 w-4 text-muted-foreground" />
               <Input
@@ -75,7 +86,9 @@ export function LoginForm() {
           </div>
 
           <div className="space-y-2">
-            <Label htmlFor="password">Senha</Label>
+            <Label htmlFor="password">
+              {t("auth.login.password", "Senha")}
+            </Label>
             <div className="relative">
               <Lock className="absolute left-3 top-3 h-4 w-4 text-muted-foreground" />
               <Input
@@ -94,13 +107,13 @@ export function LoginForm() {
         <CardFooter className="flex flex-col space-y-4">
           <Button type="submit" className="w-full mt-4" disabled={loading}>
             {loading && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
-            Entrar
+            {t("auth.login.submit", "Entrar")}
           </Button>
 
           <p className="text-sm text-center text-muted-foreground">
-            Não tem uma conta?{" "}
+            {t("auth.login.no_account", "Não tem uma conta?")}{" "}
             <Link href="/auth/signup" className="text-primary hover:underline">
-              Cadastre-se
+              {t("auth.login.signup", "Cadastre-se")}
             </Link>
           </p>
         </CardFooter>

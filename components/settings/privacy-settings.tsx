@@ -20,7 +20,10 @@ import {
 } from "@/components/ui/select";
 import { Save, Download, Upload } from "lucide-react";
 
+import { useTranslation } from "@/app/i18n/client";
+
 export function PrivacySettings() {
+  const { t } = useTranslation();
   const [settings, setSettings] = useState({
     profileVisibility: "private",
     shareProgress: false,
@@ -62,18 +65,30 @@ export function PrivacySettings() {
   return (
     <Card>
       <CardHeader>
-        <CardTitle>Privacidade e Dados</CardTitle>
+        <CardTitle>
+          {t("settings_page.privacy.title", "Privacidade e Dados")}
+        </CardTitle>
         <CardDescription>
-          Controle como seus dados são usados e compartilhados
+          {t(
+            "settings_page.privacy.description",
+            "Controle como seus dados são usados e compartilhados"
+          )}
         </CardDescription>
       </CardHeader>
       <CardContent className="space-y-6">
         {/* Visibilidade do Perfil */}
         <div className="space-y-4">
-          <h4 className="text-sm font-medium">Visibilidade</h4>
+          <h4 className="text-sm font-medium">
+            {t("settings_page.privacy.visibility.title", "Visibilidade")}
+          </h4>
 
           <div className="space-y-2">
-            <Label htmlFor="profile-visibility">Visibilidade do perfil</Label>
+            <Label htmlFor="profile-visibility">
+              {t(
+                "settings_page.privacy.visibility.profile_label",
+                "Visibilidade do perfil"
+              )}
+            </Label>
             <Select
               value={settings.profileVisibility}
               onValueChange={(value) =>
@@ -84,16 +99,28 @@ export function PrivacySettings() {
                 <SelectValue />
               </SelectTrigger>
               <SelectContent>
-                <SelectItem value="public">Público</SelectItem>
-                <SelectItem value="friends">Apenas amigos</SelectItem>
-                <SelectItem value="private">Privado</SelectItem>
+                <SelectItem value="public">
+                  {t("settings_page.privacy.visibility.public", "Público")}
+                </SelectItem>
+                <SelectItem value="friends">
+                  {t(
+                    "settings_page.privacy.visibility.friends",
+                    "Apenas amigos"
+                  )}
+                </SelectItem>
+                <SelectItem value="private">
+                  {t("settings_page.privacy.visibility.private", "Privado")}
+                </SelectItem>
               </SelectContent>
             </Select>
           </div>
 
           <div className="flex items-center justify-between">
             <Label htmlFor="share-progress" className="text-sm">
-              Compartilhar progresso publicamente
+              {t(
+                "settings_page.privacy.visibility.share_progress",
+                "Compartilhar progresso publicamente"
+              )}
             </Label>
             <Switch
               id="share-progress"
@@ -105,12 +132,20 @@ export function PrivacySettings() {
 
         {/* Coleta de Dados */}
         <div className="space-y-4">
-          <h4 className="text-sm font-medium">Coleta de dados</h4>
+          <h4 className="text-sm font-medium">
+            {t(
+              "settings_page.privacy.data_collection.title",
+              "Coleta de dados"
+            )}
+          </h4>
 
           <div className="space-y-3">
             <div className="flex items-center justify-between">
               <Label htmlFor="analytics-opt-in" className="text-sm">
-                Permitir análise de uso
+                {t(
+                  "settings_page.privacy.data_collection.analytics",
+                  "Permitir análise de uso"
+                )}
               </Label>
               <Switch
                 id="analytics-opt-in"
@@ -121,7 +156,10 @@ export function PrivacySettings() {
 
             <div className="flex items-center justify-between">
               <Label htmlFor="data-collection" className="text-sm">
-                Coleta de dados para melhorias
+                {t(
+                  "settings_page.privacy.data_collection.improvements",
+                  "Coleta de dados para melhorias"
+                )}
               </Label>
               <Switch
                 id="data-collection"
@@ -132,7 +170,10 @@ export function PrivacySettings() {
 
             <div className="flex items-center justify-between">
               <Label htmlFor="third-party-sharing" className="text-sm">
-                Compartilhamento com terceiros
+                {t(
+                  "settings_page.privacy.data_collection.third_party",
+                  "Compartilhamento com terceiros"
+                )}
               </Label>
               <Switch
                 id="third-party-sharing"
@@ -145,7 +186,9 @@ export function PrivacySettings() {
 
         {/* Gerenciamento de Dados */}
         <div className="space-y-4">
-          <h4 className="text-sm font-medium">Seus dados</h4>
+          <h4 className="text-sm font-medium">
+            {t("settings_page.privacy.data_management.title", "Seus dados")}
+          </h4>
 
           <div className="flex flex-col space-y-2 sm:flex-row sm:space-y-0 sm:space-x-2">
             <Button
@@ -154,7 +197,10 @@ export function PrivacySettings() {
               className="flex-1 bg-transparent"
             >
               <Download className="h-4 w-4 mr-2" />
-              Exportar dados
+              {t(
+                "settings_page.privacy.data_management.export",
+                "Exportar dados"
+              )}
             </Button>
             <Button
               variant="outline"
@@ -162,14 +208,19 @@ export function PrivacySettings() {
               className="flex-1 bg-transparent"
             >
               <Upload className="h-4 w-4 mr-2" />
-              Importar dados
+              {t(
+                "settings_page.privacy.data_management.import",
+                "Importar dados"
+              )}
             </Button>
           </div>
         </div>
 
         <Button onClick={handleSubmit} disabled={isLoading}>
           <Save className="h-4 w-4 mr-2" />
-          {isLoading ? "Salvando..." : "Salvar configurações"}
+          {isLoading
+            ? t("settings_page.privacy.saving", "Salvando...")
+            : t("settings_page.privacy.save", "Salvar configurações")}
         </Button>
       </CardContent>
     </Card>

@@ -87,7 +87,7 @@ export interface UserProfile {
   timezone: string;
   preferredUnits?: Unit[];
   theme?: "light" | "dark" | "system";
-  language?: "pt-BR" | "en";
+  language?: "pt-BR" | "en-US";
 }
 
 // Utility types for UI components

@@ -20,7 +20,10 @@ import {
 import { Button } from "@/components/ui/button";
 import { Save } from "lucide-react";
 
+import { useTranslation } from "@/app/i18n/client";
+
 export function NotificationSettings() {
+  const { t } = useTranslation();
   const [settings, setSettings] = useState({
     habitReminders: true,
     goalDeadlines: true,
@@ -56,20 +59,33 @@ export function NotificationSettings() {
   return (
     <Card>
       <CardHeader>
-        <CardTitle>Notificações</CardTitle>
+        <CardTitle>
+          {t("settings_page.notifications.title", "Notificações")}
+        </CardTitle>
         <CardDescription>
-          Configure como e quando você quer ser notificado
+          {t(
+            "settings_page.notifications.description",
+            "Configure como e quando você quer ser notificado"
+          )}
         </CardDescription>
       </CardHeader>
       <CardContent className="space-y-6">
         {/* Tipos de Notificação */}
         <div className="space-y-4">
-          <h4 className="text-sm font-medium">Tipos de notificação</h4>
+          <h4 className="text-sm font-medium">
+            {t(
+              "settings_page.notifications.types.title",
+              "Tipos de notificação"
+            )}
+          </h4>
 
           <div className="space-y-3">
             <div className="flex items-center justify-between">
               <Label htmlFor="habit-reminders" className="text-sm">
-                Lembretes de hábitos
+                {t(
+                  "settings_page.notifications.types.habit_reminders",
+                  "Lembretes de hábitos"
+                )}
               </Label>
               <Switch
                 id="habit-reminders"
@@ -80,7 +96,10 @@ export function NotificationSettings() {
 
             <div className="flex items-center justify-between">
               <Label htmlFor="goal-deadlines" className="text-sm">
-                Prazos de metas
+                {t(
+                  "settings_page.notifications.types.goal_deadlines",
+                  "Prazos de metas"
+                )}
               </Label>
               <Switch
                 id="goal-deadlines"
@@ -91,7 +110,10 @@ export function NotificationSettings() {
 
             <div className="flex items-center justify-between">
               <Label htmlFor="task-due-dates" className="text-sm">
-                Vencimento de tarefas
+                {t(
+                  "settings_page.notifications.types.task_due_dates",
+                  "Vencimento de tarefas"
+                )}
               </Label>
               <Switch
                 id="task-due-dates"
@@ -102,7 +124,10 @@ export function NotificationSettings() {
 
             <div className="flex items-center justify-between">
               <Label htmlFor="weekly-reports" className="text-sm">
-                Relatórios semanais
+                {t(
+                  "settings_page.notifications.types.weekly_reports",
+                  "Relatórios semanais"
+                )}
               </Label>
               <Switch
                 id="weekly-reports"
@@ -113,7 +138,10 @@ export function NotificationSettings() {
 
             <div className="flex items-center justify-between">
               <Label htmlFor="achievements" className="text-sm">
-                Conquistas e marcos
+                {t(
+                  "settings_page.notifications.types.achievements",
+                  "Conquistas e marcos"
+                )}
               </Label>
               <Switch
                 id="achievements"
@@ -126,12 +154,20 @@ export function NotificationSettings() {
 
         {/* Canais de Notificação */}
         <div className="space-y-4">
-          <h4 className="text-sm font-medium">Canais de notificação</h4>
+          <h4 className="text-sm font-medium">
+            {t(
+              "settings_page.notifications.channels.title",
+              "Canais de notificação"
+            )}
+          </h4>
 
           <div className="space-y-3">
             <div className="flex items-center justify-between">
               <Label htmlFor="email-notifications" className="text-sm">
-                Notificações por email
+                {t(
+                  "settings_page.notifications.channels.email",
+                  "Notificações por email"
+                )}
               </Label>
               <Switch
                 id="email-notifications"
@@ -142,7 +178,10 @@ export function NotificationSettings() {
 
             <div className="flex items-center justify-between">
               <Label htmlFor="push-notifications" className="text-sm">
-                Notificações push
+                {t(
+                  "settings_page.notifications.channels.push",
+                  "Notificações push"
+                )}
               </Label>
               <Switch
                 id="push-notifications"
@@ -155,11 +194,18 @@ export function NotificationSettings() {
 
         {/* Configurações de Horário */}
         <div className="space-y-4">
-          <h4 className="text-sm font-medium">Horários</h4>
+          <h4 className="text-sm font-medium">
+            {t("settings_page.notifications.schedule.title", "Horários")}
+          </h4>
 
           <div className="grid gap-4 md:grid-cols-2">
             <div className="space-y-2">
-              <Label htmlFor="reminder-time">Horário dos lembretes</Label>
+              <Label htmlFor="reminder-time">
+                {t(
+                  "settings_page.notifications.schedule.reminder_time",
+                  "Horário dos lembretes"
+                )}
+              </Label>
               <Select
                 value={settings.reminderTime}
                 onValueChange={(value) =>
@@ -182,7 +228,12 @@ export function NotificationSettings() {
             </div>
 
             <div className="space-y-2">
-              <Label htmlFor="frequency">Frequência dos relatórios</Label>
+              <Label htmlFor="frequency">
+                {t(
+                  "settings_page.notifications.schedule.frequency",
+                  "Frequência dos relatórios"
+                )}
+              </Label>
               <Select
                 value={settings.frequency}
                 onValueChange={(value) =>
@@ -193,10 +244,24 @@ export function NotificationSettings() {
                   <SelectValue />
                 </SelectTrigger>
                 <SelectContent>
-                  <SelectItem value="daily">Diário</SelectItem>
-                  <SelectItem value="weekly">Semanal</SelectItem>
-                  <SelectItem value="monthly">Mensal</SelectItem>
-                  <SelectItem value="never">Nunca</SelectItem>
+                  <SelectItem value="daily">
+                    {t("settings_page.notifications.schedule.daily", "Diário")}
+                  </SelectItem>
+                  <SelectItem value="weekly">
+                    {t(
+                      "settings_page.notifications.schedule.weekly",
+                      "Semanal"
+                    )}
+                  </SelectItem>
+                  <SelectItem value="monthly">
+                    {t(
+                      "settings_page.notifications.schedule.monthly",
+                      "Mensal"
+                    )}
+                  </SelectItem>
+                  <SelectItem value="never">
+                    {t("settings_page.notifications.schedule.never", "Nunca")}
+                  </SelectItem>
                 </SelectContent>
               </Select>
             </div>
@@ -205,7 +270,9 @@ export function NotificationSettings() {
 
         <Button onClick={handleSubmit} disabled={isLoading}>
           <Save className="h-4 w-4 mr-2" />
-          {isLoading ? "Salvando..." : "Salvar configurações"}
+          {isLoading
+            ? t("settings_page.notifications.saving", "Salvando...")
+            : t("settings_page.notifications.save", "Salvar configurações")}
         </Button>
       </CardContent>
     </Card>
