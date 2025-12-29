@@ -13,8 +13,7 @@ import {
   CheckSquare,
   BarChart3,
   Settings,
-  Menu,
-  X,
+  PanelLeft,
   LogOut,
 } from "lucide-react";
 import { useAuth } from "@/contexts/auth-context";
@@ -64,28 +63,36 @@ export function Sidebar({ className }: SidebarProps) {
   ];
 
   return (
-    <div className={cn("flex h-full flex-col bg-card border-r", className)}>
+    <div
+      className={cn(
+        "flex h-full flex-col bg-card border-r transition-all duration-300",
+        isCollapsed ? "w-[70px]" : "w-64",
+        className
+      )}
+    >
       {/* Header */}
-      <div className="flex h-16 items-center justify-between px-4 border-b">
-        <div className="flex items-center space-x-2">
-          <div className="w-8 h-8 bg-primary rounded-lg flex items-center justify-center">
-            <Target className="h-5 w-5 text-primary-foreground" />
-          </div>
-          {!isCollapsed && (
+      <div
+        className={cn(
+          "flex h-16 items-center px-4 border-b",
+          isCollapsed ? "justify-center" : "justify-between"
+        )}
+      >
+        {!isCollapsed && (
+          <div className="flex items-center space-x-2">
+            <div className="w-8 h-8 bg-primary rounded-lg flex items-center justify-center">
+              <Target className="h-5 w-5 text-primary-foreground" />
+            </div>
             <span className="font-bold text-lg">HabitsGoals</span>
-          )}
-        </div>
+          </div>
+        )}
         <Button
           variant="ghost"
           size="icon"
           onClick={() => setIsCollapsed(!isCollapsed)}
-          className="h-8 w-8"
+          className={cn("h-8 w-8", isCollapsed && "w-10 h-10")}
         >
-          {isCollapsed ? (
-            <Menu className="h-4 w-4" />
-          ) : (
-            <X className="h-4 w-4" />
-          )}
+          <PanelLeft className="h-4 w-4" />
+          <span className="sr-only">Toggle Sidebar</span>
         </Button>
       </div>
 
@@ -94,8 +101,6 @@ export function Sidebar({ className }: SidebarProps) {
         <nav className="space-y-2">
           {navigation.map((item) => {
             const linkHref = item.href;
-            // Check if pathname matches the link href (handling potential trailing slash or sub-paths if strict)
-            // Or simply strict match for now
             const isActive =
               pathname === linkHref || pathname.startsWith(`${linkHref}/`);
 
@@ -105,9 +110,10 @@ export function Sidebar({ className }: SidebarProps) {
                   variant={isActive ? "secondary" : "ghost"}
                   className={cn(
                     "w-full justify-start cursor-pointer",
-                    isActive && "bg-secondary  text-secondary-foreground",
-                    isCollapsed && "px-2"
+                    isActive && "bg-secondary text-secondary-foreground",
+                    isCollapsed ? "px-2 justify-center" : "px-4"
                   )}
+                  title={isCollapsed ? item.name : undefined}
                 >
                   <item.icon
                     className={cn("h-4 w-4", !isCollapsed && "mr-3")}
@@ -123,7 +129,7 @@ export function Sidebar({ className }: SidebarProps) {
       {/* User Profile & Sign Out */}
       <div className="border-t p-3">
         {!isCollapsed && userProfile && (
-          <div className="mb-3">
+          <div className="mb-3 px-2">
             <p className="text-sm font-medium truncate">
               {userProfile.name || "Usuário"}
             </p>
@@ -137,8 +143,9 @@ export function Sidebar({ className }: SidebarProps) {
           onClick={signOut}
           className={cn(
             "w-full justify-start text-muted-foreground",
-            isCollapsed && "px-2"
+            isCollapsed ? "px-2 justify-center" : "px-4"
           )}
+          title={isCollapsed ? t("sidebar.logout", "Log out") : undefined}
         >
           <LogOut className={cn("h-4 w-4", !isCollapsed && "mr-3")} />
           {!isCollapsed && t("sidebar.logout", "Log out")}

@@ -14,7 +14,7 @@ export function AppLayout({ children }: AppLayoutProps) {
   return (
     <ProtectedRoute>
       <div className="flex h-screen bg-background">
-        <Sidebar className="w-64 hidden md:flex" />
+        <Sidebar className="hidden md:flex" />
         <div className="flex-1 flex flex-col h-screen overflow-hidden">
           {/* Mobile Header */}
           <header className="md:hidden flex h-14 items-center gap-4 border-b bg-background px-6">
