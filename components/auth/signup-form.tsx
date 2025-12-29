@@ -139,7 +139,7 @@ export function SignupForm() {
             </div>
           </div>
 
-          <div className="space-y-2">
+          <div className="space-y-2 mt-2">
             <Label htmlFor="confirmPassword">
               {t("auth.signup.confirm_password", "Confirmar Senha")}
             </Label>
