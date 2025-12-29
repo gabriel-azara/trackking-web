@@ -21,8 +21,11 @@ import { signUp } from "@/lib/firebase/auth";
 import { Loader2, Mail, Lock, User } from "lucide-react";
 
 import { useTranslation } from "@/app/i18n/client";
+import { useAuth } from "@/contexts/auth-context";
+import { useEffect } from "react";
 
 export function SignupForm() {
+  const { user, loading: authLoading } = useAuth();
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -31,6 +34,12 @@ export function SignupForm() {
   const [error, setError] = useState("");
   const router = useRouter();
   const { t } = useTranslation();
+
+  useEffect(() => {
+    if (!authLoading && user) {
+      router.push("/dashboard");
+    }
+  }, [user, authLoading, router]);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
